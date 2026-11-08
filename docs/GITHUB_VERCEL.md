@@ -10,7 +10,7 @@ La configuración está preparada, pero GitHub Actions y el despliegue en Vercel
 
 1. Repositorio seleccionado: [plan-semanal](https://github.com/sebastiancarrascoz-spec/plan-semanal), separado de Inergy y del empleador. Su visibilidad pública permite leer el código; no contiene registros personales ni claves.
 2. Cargar el código con la integración de GitHub. No compartir contraseñas ni tokens por el chat.
-3. Conectar Vercel e importar ese repositorio. Autorizar únicamente el repositorio necesario. La configuración de raíz es Next.js, Node.js 24, salida `out`; `vercel.json` define instalación y compilación.
+3. Conectar Vercel e importar ese repositorio. Autorizar únicamente el repositorio necesario. La aplicación se compila con Next.js y Node.js 24, pero se sirve como exportación estática: usar el preset **Other** y salida `out`. `vercel.json` fija `framework: null` y define instalación y compilación. El preset Next.js con salida personalizada `out` intentaba buscar `routes-manifest.json` en esa carpeta y fallaba; la exportación no necesita un servidor Next.js.
 4. Seleccionar `main` como rama de producción. Comprobar el primer resultado de GitHub Actions y el primer despliegue Vercel, incluida la instalación PWA, antes de considerar terminada la migración.
 
 GitHub guarda el código; Vercel publica la web. Ninguno de estos pasos activa por sí solo la base de datos ni el acceso del nutricionista. El adaptador Supabase continúa opcional y desconectado.
