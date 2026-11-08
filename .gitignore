@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+*.tsbuildinfo
+.sites/
+.vercel/
+artifacts/
+lighthouse-*.json
+!docs/lighthouse-resumen.json
