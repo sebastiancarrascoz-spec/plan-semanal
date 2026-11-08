@@ -1,0 +1,114 @@
+[
+  {
+    "id": "pescado|g",
+    "name": "Pescado",
+    "quantity": 750,
+    "unit": "g",
+    "section": "Carnes y pescados"
+  },
+  {
+    "id": "avena|g",
+    "name": "Avena integral",
+    "quantity": 180,
+    "unit": "g",
+    "section": "Despensa"
+  },
+  {
+    "id": "lentejas|taza cocida",
+    "name": "Lentejas cocidas",
+    "quantity": 19.5,
+    "unit": "taza cocida",
+    "section": "Despensa"
+  },
+  {
+    "id": "arroz|g cocidos",
+    "name": "Arroz integral cocido",
+    "quantity": 3200,
+    "unit": "g cocidos",
+    "section": "Despensa"
+  },
+  {
+    "id": "aceite|cucharadita",
+    "name": "Aceite de oliva",
+    "quantity": 28,
+    "unit": "cucharadita",
+    "section": "Despensa"
+  },
+  {
+    "id": "porotos|taza cocida",
+    "name": "Porotos cocidos",
+    "quantity": 6.75,
+    "unit": "taza cocida",
+    "section": "Despensa"
+  },
+  {
+    "id": "nueces|g",
+    "name": "Nueces",
+    "quantity": 150,
+    "unit": "g",
+    "section": "Despensa"
+  },
+  {
+    "id": "quinoa|g cocidos",
+    "name": "Quínoa cocida",
+    "quantity": 400,
+    "unit": "g cocidos",
+    "section": "Despensa"
+  },
+  {
+    "id": "palta|g",
+    "name": "Palta",
+    "quantity": 200,
+    "unit": "g",
+    "section": "Frutas y verduras"
+  },
+  {
+    "id": "pera|unidad",
+    "name": "Pera",
+    "quantity": 2,
+    "unit": "unidad",
+    "section": "Frutas y verduras"
+  },
+  {
+    "id": "brocoli|taza",
+    "name": "Brócoli",
+    "quantity": 42,
+    "unit": "taza",
+    "section": "Frutas y verduras"
+  },
+  {
+    "id": "manzana|unidad",
+    "name": "Manzana",
+    "quantity": 6,
+    "unit": "unidad",
+    "section": "Frutas y verduras"
+  },
+  {
+    "id": "naranja|unidad",
+    "name": "Naranja",
+    "quantity": 6,
+    "unit": "unidad",
+    "section": "Frutas y verduras"
+  },
+  {
+    "id": "tofu|g",
+    "name": "Tofu",
+    "quantity": 960,
+    "unit": "g",
+    "section": "Refrigerados"
+  },
+  {
+    "id": "soya|ml",
+    "name": "Bebida de soya sin azúcar",
+    "quantity": 800,
+    "unit": "ml",
+    "section": "Refrigerados"
+  },
+  {
+    "id": "yogur|g",
+    "name": "Yogur natural sin azúcar",
+    "quantity": 680,
+    "unit": "g",
+    "section": "Refrigerados"
+  }
+]

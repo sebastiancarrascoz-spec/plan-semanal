@@ -1,0 +1,450 @@
+{
+  "version": 1,
+  "diet": "omnívoro",
+  "objective": "Mejorar triglicéridos",
+  "foods": [
+    {
+      "id": "avena",
+      "name": "Avena integral",
+      "group": "Carbohidratos",
+      "quantity": 30,
+      "unit": "g",
+      "section": "Despensa",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": true,
+      "contains": [
+        "gluten"
+      ],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "pan",
+      "name": "Pan integral",
+      "group": "Carbohidratos",
+      "quantity": 30,
+      "unit": "g",
+      "section": "Panadería",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": true,
+      "contains": [
+        "gluten"
+      ],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "arroz",
+      "name": "Arroz integral cocido",
+      "group": "Carbohidratos",
+      "quantity": 100,
+      "unit": "g cocidos",
+      "section": "Despensa",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": true,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "quinoa",
+      "name": "Quínoa cocida",
+      "group": "Carbohidratos",
+      "quantity": 100,
+      "unit": "g cocidos",
+      "section": "Despensa",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": true,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "lentejas",
+      "name": "Lentejas cocidas",
+      "group": "Proteínas",
+      "quantity": 0.75,
+      "unit": "taza cocida",
+      "section": "Despensa",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": true,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": [],
+      "proteinRole": "plato"
+    },
+    {
+      "id": "porotos",
+      "name": "Porotos cocidos",
+      "group": "Proteínas",
+      "quantity": 0.75,
+      "unit": "taza cocida",
+      "section": "Despensa",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": true,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": [],
+      "proteinRole": "plato"
+    },
+    {
+      "id": "tofu",
+      "name": "Tofu",
+      "group": "Proteínas",
+      "quantity": 80,
+      "unit": "g",
+      "section": "Refrigerados",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [
+        "soya"
+      ],
+      "mayContain": [],
+      "reviewedFor": [],
+      "proteinRole": "plato"
+    },
+    {
+      "id": "soya",
+      "name": "Bebida de soya sin azúcar",
+      "group": "Proteínas",
+      "quantity": 200,
+      "unit": "ml",
+      "section": "Refrigerados",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [
+        "soya"
+      ],
+      "mayContain": [],
+      "reviewedFor": [],
+      "proteinRole": "bebida"
+    },
+    {
+      "id": "pollo",
+      "name": "Pollo",
+      "group": "Proteínas",
+      "quantity": 50,
+      "unit": "g",
+      "section": "Carnes y pescados",
+      "diets": [
+        "omnívoro"
+      ],
+      "priority": false,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": [],
+      "proteinRole": "plato"
+    },
+    {
+      "id": "pescado",
+      "name": "Pescado",
+      "group": "Proteínas",
+      "quantity": 50,
+      "unit": "g",
+      "section": "Carnes y pescados",
+      "diets": [
+        "omnívoro",
+        "pescetariano"
+      ],
+      "priority": false,
+      "contains": [
+        "pescado"
+      ],
+      "mayContain": [],
+      "reviewedFor": [],
+      "proteinRole": "plato"
+    },
+    {
+      "id": "yogur",
+      "name": "Yogur natural sin azúcar",
+      "group": "Proteínas",
+      "quantity": 170,
+      "unit": "g",
+      "section": "Refrigerados",
+      "diets": [
+        "omnívoro",
+        "vegetariano"
+      ],
+      "priority": false,
+      "contains": [
+        "leche",
+        "lactosa"
+      ],
+      "mayContain": [],
+      "reviewedFor": [],
+      "proteinRole": "colación"
+    },
+    {
+      "id": "palta",
+      "name": "Palta",
+      "group": "Grasas",
+      "quantity": 50,
+      "unit": "g",
+      "section": "Frutas y verduras",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "nueces",
+      "name": "Nueces",
+      "group": "Grasas",
+      "quantity": 15,
+      "unit": "g",
+      "section": "Despensa",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [
+        "frutos_secos"
+      ],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "aceite",
+      "name": "Aceite de oliva",
+      "group": "Aceite",
+      "quantity": 1,
+      "unit": "cucharadita",
+      "section": "Despensa",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "manzana",
+      "name": "Manzana",
+      "group": "Frutas",
+      "quantity": 1,
+      "unit": "unidad",
+      "section": "Frutas y verduras",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "pera",
+      "name": "Pera",
+      "group": "Frutas",
+      "quantity": 1,
+      "unit": "unidad",
+      "section": "Frutas y verduras",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "naranja",
+      "name": "Naranja",
+      "group": "Frutas",
+      "quantity": 1,
+      "unit": "unidad",
+      "section": "Frutas y verduras",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "tomate",
+      "name": "Tomate",
+      "group": "Verduras",
+      "quantity": 1,
+      "unit": "taza",
+      "section": "Frutas y verduras",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "brocoli",
+      "name": "Brócoli",
+      "group": "Verduras",
+      "quantity": 1,
+      "unit": "taza",
+      "section": "Frutas y verduras",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    },
+    {
+      "id": "ensalada",
+      "name": "Ensalada de hojas",
+      "group": "Verduras",
+      "quantity": 1,
+      "unit": "taza",
+      "section": "Frutas y verduras",
+      "diets": [
+        "omnívoro",
+        "pescetariano",
+        "vegetariano",
+        "vegano"
+      ],
+      "priority": false,
+      "contains": [],
+      "mayContain": [],
+      "reviewedFor": []
+    }
+  ],
+  "groups": [
+    {
+      "name": "Carbohidratos",
+      "daily": 6,
+      "distribution": [
+        2,
+        0,
+        2,
+        0,
+        2
+      ]
+    },
+    {
+      "name": "Proteínas",
+      "daily": 10,
+      "distribution": [
+        3,
+        0,
+        3,
+        1,
+        3
+      ]
+    },
+    {
+      "name": "Grasas",
+      "daily": 2,
+      "distribution": [
+        1,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "Aceite",
+      "daily": 4,
+      "distribution": [
+        0,
+        0,
+        2,
+        0,
+        2
+      ]
+    },
+    {
+      "name": "Frutas",
+      "daily": 2,
+      "distribution": [
+        0,
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "name": "Verduras",
+      "daily": 6,
+      "distribution": [
+        0,
+        0,
+        3,
+        0,
+        3
+      ]
+    }
+  ]
+}
