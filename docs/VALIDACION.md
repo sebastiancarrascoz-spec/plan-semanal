@@ -1,5 +1,11 @@
 # Validación de la entrega
 
+## Publicación en Vercel: 8 de noviembre de 2026
+
+Producción confirmada como READY en https://plan-semanal-snowy.vercel.app, proyecto `plan-semanal`, plan Hobby. Las 53 pruebas, TypeScript y la compilación pasan en GitHub Actions para el código `b8e80d6260bc38fbcf284820f28710e2ac946ef8`. Se corrigió el preset Vercel a Other para servir la exportación estática `out` sin buscar manifiestos de servidor Next.js.
+
+Se comprobaron por HTTP sin autenticación la portada, el manifiesto, el service worker con precaché de recursos Next.js y los iconos de 192/512 px: todos responden 200. No equivale a una prueba de instalación real, sincronización ni revisión visual de todos los flujos. El acceso GitHub → Vercel no quedó autorizado y las publicaciones automáticas siguen pendientes; la CLI sí está autorizada. Se retiró la credencial de bypass creada automáticamente por la verificación CLI; la URL de producción es accesible sin ella. Supabase continúa desconectado. Las notas de versiones anteriores que siguen abajo describen el estado histórico de cada entrega.
+
 7 de noviembre de 2026.
 
 - Next.js 15.5.29: compilación estática de producción y comprobación de TypeScript estricto satisfactorias.

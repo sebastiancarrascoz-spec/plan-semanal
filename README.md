@@ -4,7 +4,7 @@ App personal en español de Chile para seguir un plan por porciones. Es una demo
 
 ## GitHub y alojamiento administrado
 
-Configuración preparada para GitHub Actions y Vercel, con Node.js 24, pruebas antes de publicar y exportación estática PWA. Repositorio seleccionado: [plan-semanal](https://github.com/sebastiancarrascoz-spec/plan-semanal). La conexión y el primer despliegue Vercel requieren confirmación en ese servicio. Ver [pasos y estado real](docs/GITHUB_VERCEL.md). Antes de cambiar de dominio, exportar el respaldo desde Ajustes: los datos locales no se trasladan solos.
+Demo publicada en [Mi Semana en Vercel](https://plan-semanal-snowy.vercel.app), en el plan Hobby personal. Repositorio: [plan-semanal](https://github.com/sebastiancarrascoz-spec/plan-semanal), con GitHub Actions, Node.js 24, pruebas antes de publicar y exportación estática PWA. El despliegue por CLI está comprobado; la conexión automática con GitHub sigue pendiente de autorización. Ver [pasos y estado real](docs/GITHUB_VERCEL.md). Antes de cambiar de dominio, exportar el respaldo desde Ajustes: los datos locales no se trasladan solos.
 
 ## Versión 0.5: preparaciones reconocibles
 
@@ -84,7 +84,7 @@ La demo publicada no tiene estas variables: no crea cuentas ni comparte informac
 
 ## Vercel
 
-Importar este repositorio en una cuenta Vercel, seleccionar Next.js, build `npm run build`, salida `out`, agregar las dos variables públicas si se usará Supabase y desplegar. El entorno de esta entrega no tiene una cuenta Vercel conectada; la demo usa Sites como alojamiento alternativo. No se ha realizado despliegue en Vercel.
+Proyecto `plan-semanal` creado y publicado por CLI en el espacio personal Hobby. Se usa el preset **Other**, Node.js 24 y salida `out`, porque Next.js genera una exportación estática. `vercel.json` ejecuta las pruebas antes de compilar. El preset Next.js con salida `out` fallaba al buscar un manifiesto de servidor; ya se corrigió. El acceso de Vercel a GitHub todavía necesita autorización para activar publicaciones por cada push. Supabase sigue desconectado. La demo anterior de Sites se conserva para los registros locales existentes.
 
 ## Archivos
 

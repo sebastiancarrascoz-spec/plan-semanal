@@ -2,9 +2,13 @@
 
 ## Decisión y estado real
 
+Actualización del 8 de noviembre de 2026: proyecto `plan-semanal` creado en el plan **Hobby**, con producción disponible en https://plan-semanal-snowy.vercel.app. Despliegue confirmado como READY; portada, manifiesto, service worker e iconos 192/512 responden HTTP 200 sin autenticación. El código publicado corresponde a `b8e80d6260bc38fbcf284820f28710e2ac946ef8`, con GitHub Actions satisfactorio. La instalación real y el recorrido visual en un dispositivo siguen pendientes.
+
+La CLI oficial está autorizada en el equipo. La conexión GitHub → Vercel fue rechazada y la consulta final del proyecto confirma que no tiene repositorio vinculado. Para activar publicaciones automáticas, autorizar el repositorio desde [Settings → Git del proyecto](https://vercel.com/sebastiancarrascoz-spec/plan-semanal/settings/git). Hasta completar ese paso, publicar mediante la CLI autenticada. La configuración de flujo descrita abajo es el comportamiento previsto después de conectar GitHub, no una función ya activada.
+
 8 de noviembre de 2026. Sebastián eligió GitHub y alojamiento administrado, sin VPS, y proporcionó el repositorio `sebastiancarrascoz-spec/plan-semanal`. Se verificó que estaba vacío y público antes de cargar el código. Se propone Vercel, compatible con el proyecto Next.js existente. La sesión local de GitHub CLI no tiene autenticación válida; se usa la integración conectada de GitHub.
 
-La configuración está preparada, pero GitHub Actions y el despliegue en Vercel no se consideran ejecutados hasta observar resultados en esos servicios. La demo anterior en Sites conserva su URL y sus datos locales.
+La demo anterior en Sites conserva su URL y sus datos locales. No se contrató un plan de pago.
 
 ## Configuración inicial
 
