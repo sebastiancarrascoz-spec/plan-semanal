@@ -1,5 +1,13 @@
 # Entrenamiento A/B e impresión
 
+## Corrección 0.6.1: punto de partida explícito
+
+Se muestra una primera meta concreta de series × repeticiones y una columna con carga de prueba o último registro. Para adultos de 18–64 años que comienzan en gimnasio, sin molestias conocidas, la plantilla ofrece ensayos conservadores en máquinas con selector: pecho 5 kg, remo 10 kg, jalón 10 kg, hombros 5 kg y femoral 5 kg. Prensa: 10 kg únicamente si es horizontal con selector; otras prensas requieren calibración con el entrenador. Los ejercicios con peso corporal indican 0 kg externos. Son convenciones de prueba de la plantilla, no cargas derivadas del InBody, estimaciones de fuerza ni cifras clínicas validadas por las fuentes.
+
+Las cifras de máquinas distintas no son equivalentes. Si el equipo no permite la carga indicada, no se exige elegir una mayor. La primera prueba busca 8 reps (6 por lado en tronco) conservando 2–3 posibles. Si no se logra con técnica, reducir; si quedan más de cinco adicionales con facilidad, descansar y probar un solo incremento pequeño. Máximo dos ensayos, con apoyo del entrenador. El registro real anterior tiene prioridad. No se rellena automáticamente el campo de kg con una carga no realizada.
+
+Se añade una prueba de regresión de carga inicial, repeticiones, prioridad del registro, ausencia de fórmula por peso corporal, alcance de prensa y exclusión de cifras genéricas para mayores de 65 años. Total: 61 pruebas. El PDF personal v2 incorpora estas cifras y se revisa fuera del repositorio.
+
 ## Modelo y personalización
 
 `trainingProfile` es un campo opcional del estado local: edad, peso de referencia, altura, experiencia, equipamiento, situación de molestias, notas y semana 1–12. Se conserva en el respaldo completo y se mantiene al migrar el estado. El perfil inicial no contiene datos de salud personales. Se ofrece el último peso registrado hasta hoy para facilitar el llenado; se puede corregir antes de guardarlo. La altura parte del perfil general, que debe revisarse.

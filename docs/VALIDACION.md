@@ -1,5 +1,9 @@
 # Validación de la entrega
 
+## Corrección 0.6.1: 9 de noviembre de 2026
+
+Sesenta y una pruebas y TypeScript estricto satisfactorios. La nueva regresión comprueba el punto de partida explícito, sus repeticiones, la distinción de carga de prueba frente a registro realizado y las limitaciones por equipo y edad. PDF personal v2: dos páginas renderizadas y revisadas visualmente, con cifras de prueba y casillas separadas para lo realizado. No se incluyen sus datos en el repositorio. La impresión interactiva del navegador sigue sin revisión visual.
+
 ## Entrenamiento 0.6: 8 de noviembre de 2026
 
 Sesenta pruebas satisfactorias y TypeScript estricto. Se verifican las nuevas reglas A/B y se conserva el historial. La compilación estática completa pasa. El PDF privado de A/B se comprobó como dos páginas y ambas se renderizaron y revisaron visualmente sin cortes. No se incluyen sus datos en el repositorio. La paginación del botón de impresión del navegador queda pendiente de revisión visual en ese entorno; las reglas de impresión se revisaron en código.

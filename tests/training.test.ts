@@ -6,6 +6,7 @@ import {
   validateTrainingProfile,
   canProgress,
   lastTrainingSet,
+  startingPrescription,
   type WorkoutSet,
 } from "../lib/training.ts";
 import { initial, migrateState } from "../lib/state.ts";
@@ -27,6 +28,34 @@ test("inicio en gimnasio: ambas rutinas y progresión gradual, sin cargas deduci
   assert.equal(
     buildTrainingPlan({ ...profile, experience: "regular", week: 5 }).sets,
     3,
+  );
+});
+
+test("punto de partida distingue cargas de prueba, registro real y peso corporal", () => {
+  const plan = buildTrainingPlan(profile),
+    ex = plan.routines.A[1];
+  assert.equal(startingPrescription(ex, profile).kg, 5);
+  assert.equal(startingPrescription(ex, profile).reps, 8);
+  assert.equal(startingPrescription(ex, profile).kind, "prueba");
+  assert.deepEqual(
+    startingPrescription(ex, profile),
+    startingPrescription(ex, { ...profile, weightKg: 120 }),
+  );
+  assert.equal(
+    startingPrescription(ex, profile, {
+      date: "2026-10-01",
+      routine: "A",
+      exercise: ex.name,
+      kg: 7.5,
+      reps: 8,
+    }).kg,
+    7.5,
+  );
+  assert.equal(startingPrescription(plan.routines.A[3], profile).kg, 0);
+  assert.equal(startingPrescription(ex, { ...profile, age: 70 }).kg, undefined);
+  assert.match(
+    startingPrescription(plan.routines.A[0], profile).label,
+    /SOLO en prensa horizontal/,
   );
 });
 test("no se genera una rutina sin confirmar molestias o con necesidad de revisión", () => {

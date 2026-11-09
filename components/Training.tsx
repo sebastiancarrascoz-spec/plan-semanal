@@ -12,6 +12,7 @@ import {
   validateTrainingProfile,
   lastTrainingSet,
   canProgress,
+  startingPrescription,
   equipmentLabels,
   trainingSources,
 } from "../lib/training";
@@ -264,6 +265,16 @@ export function Training(props: Props) {
                         {target(ex)} repeticiones · {loadText(previous, ex)}
                       </p>
                       <p>{ex.cue}</p>
+                      <p className="scope-note">
+                        <strong>
+                          Punto de partida: {plan.sets} × {ex.min}
+                          {ex.eachSide ? " por lado" : " repeticiones"}.
+                        </strong>{" "}
+                        {startingPrescription(ex, p, previous).label}.{" "}
+                        {previous
+                          ? ""
+                          : "Carga de prueba, todavía no comprobada en tu sesión."}
+                      </p>
                       {canProgress(logged, ex, plan.sets) && (
                         <div className="success-note">
                           Completaste las series al tope del rango. Si te
@@ -390,6 +401,20 @@ export function Training(props: Props) {
             </p>
             <h3>Elige la carga</h3>
             <p>
+              Las cifras iniciales son ensayos conservadores de la plantilla, no
+              una medición de fuerza ni un cálculo desde el InBody. Solo aplican
+              a máquinas con selector de placas. Si el equipo es distinto o no
+              permite esa carga, pide al entrenador una prueba con su mínimo; no
+              elijas una carga mayor por obligación.
+            </p>
+            <p>
+              Prueba 8 repeticiones. Si cuesta llegar a 8, pierdes técnica o no
+              te quedan 2–3 posibles, baja la carga. Si podrías hacer más de 5
+              adicionales con facilidad, descansa 90–120 segundos y prueba un
+              solo incremento pequeño. Haz como máximo dos pruebas; registra la
+              carga que sí comprobaste, aunque sea diferente de la sugerida.
+            </p>
+            <p>
               Empieza con una carga ligera. Si no llegas al mínimo de
               repeticiones o pierdes la técnica, bájala. El peso corporal no
               determina cuántos kg debes levantar.
@@ -488,7 +513,7 @@ export function Training(props: Props) {
                   <tr>
                     <th>Ejercicio y técnica</th>
                     <th>Reps</th>
-                    <th>Último registro</th>
+                    <th>Carga de inicio o último registro</th>
                     {[1, 2, 3].map((n) => (
                       <th key={n}>
                         Serie {n}
@@ -505,12 +530,19 @@ export function Training(props: Props) {
                         <strong>{ex.name}</strong>
                         <small>{ex.cue}</small>
                       </td>
-                      <td>{target(ex)}</td>
                       <td>
-                        {loadText(
-                          lastTrainingSet(props.sets, r, ex.name, props.date),
-                          ex,
-                        )}
+                        {plan.sets} × {ex.min}
+                        {ex.eachSide ? " por lado" : " reps"}
+                        <small>Después: {target(ex)}</small>
+                      </td>
+                      <td>
+                        {
+                          startingPrescription(
+                            ex,
+                            p,
+                            lastTrainingSet(props.sets, r, ex.name, props.date),
+                          ).label
+                        }
                       </td>
                       {[1, 2, 3].map((n) => (
                         <td key={n}>
@@ -525,6 +557,17 @@ export function Training(props: Props) {
                   ))}
                 </tbody>
               </table>
+              <p>
+                <strong>
+                  Las cargas numéricas son de prueba, no fuerza estimada por
+                  InBody.
+                </strong>{" "}
+                Solo máquinas con selector; otra máquina requiere calibración
+                con el entrenador. Prueba 8 reps: si no quedan 2–3 posibles,
+                baja carga. Si quedan más de 5 con facilidad, descansa 90–120 s
+                y prueba el menor incremento, máximo dos ensayos. No registres
+                una sugerencia como carga realizada.
+              </p>
               <p>
                 <strong>Cómo progresar:</strong> primero completa el rango con
                 buena técnica. Solo si todas las series llegan al tope, sin
