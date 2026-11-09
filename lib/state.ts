@@ -9,6 +9,7 @@ import {
 } from "./engine.ts";
 import type { BodyScan } from "./body.ts";
 import type { TrainingProfile } from "./training.ts";
+import type { TrainingAssessment } from "./calibration.ts";
 import type { Cart } from "./cart.ts";
 import { todayKey, type PurchaseBasket } from "./purchases.ts";
 import type { PantryLot, PreparedBatch, KitchenEvent } from "./kitchen.ts";
@@ -38,6 +39,7 @@ export type State = {
   }[];
   measurements: Measurement[];
   trainingProfile?: TrainingProfile;
+  trainingAssessments?: TrainingAssessment[];
   bodyScans: BodyScan[];
   carts: Record<string, Cart>;
   shoppingStart: string;

@@ -967,6 +967,18 @@ export default function Home() {
               }
               date={date}
               sets={s.sets}
+              assessments={s.trainingAssessments || []}
+              bodyScan={[...s.bodyScans]
+                .filter((x) => x.date <= todayKey())
+                .sort((a, b) => a.date.localeCompare(b.date))
+                .at(-1)}
+              onAssessment={(a) => {
+                update((p) => ({
+                  ...p,
+                  trainingAssessments: [...(p.trainingAssessments || []), a],
+                }));
+                notify("Prueba guardada. Revisa el resultado por ejercicio.");
+              }}
               onProfile={(trainingProfile) => {
                 update((p) => ({ ...p, trainingProfile }));
                 notify("Rutinas A y B adaptadas. Ya puedes imprimirlas.");

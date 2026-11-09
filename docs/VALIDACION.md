@@ -1,5 +1,9 @@
 # Validación de la entrega
 
+## Calibración 0.7: 9 de noviembre de 2026
+
+Se retiran las cargas genéricas. Siete nuevas pruebas verifican la evaluación inicial y su conservación; la prueba de 0.6.1 se sustituye por una regresión contra kg inventados o registros sin contexto. Total: 68 pruebas satisfactorias y TypeScript estricto. Se comprueba que una evaluación satisfactoria conserva los kg y las repeticiones realizados y explicita el equipo; dolor, técnica pendiente o esfuerzo fuera de objetivo impiden declararla comprobada. Revisión visual del diálogo de impresión todavía pendiente.
+
 ## Corrección 0.6.1: 9 de noviembre de 2026
 
 Sesenta y una pruebas y TypeScript estricto satisfactorios. La nueva regresión comprueba el punto de partida explícito, sus repeticiones, la distinción de carga de prueba frente a registro realizado y las limitaciones por equipo y edad. PDF personal v2: dos páginas renderizadas y revisadas visualmente, con cifras de prueba y casillas separadas para lo realizado. No se incluyen sus datos en el repositorio. La impresión interactiva del navegador sigue sin revisión visual.

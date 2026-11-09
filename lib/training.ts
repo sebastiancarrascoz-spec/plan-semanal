@@ -268,57 +268,25 @@ export function canProgress(
   );
 }
 
+import {
+  assessedPrescription,
+  type TrainingAssessment,
+} from "./calibration.ts";
 export function startingPrescription(
   ex: TrainingExercise,
   p: TrainingProfile,
   previous?: WorkoutSet,
+  assessment?: TrainingAssessment,
 ) {
-  const reps = ex.min;
-  if (!ex.externalLoad)
-    return {
-      reps,
-      kg: 0,
-      kind: "sin_carga",
-      label: "0 kg externos · peso corporal",
-    };
-  if (previous)
-    return {
-      reps,
-      kg: previous.kg,
-      kind: "registro",
-      label: `${previous.kg} kg del último registro; confirma técnica y esfuerzo`,
-    };
-  const trials: Record<string, number> = {
-    "Prensa de piernas": 10,
-    "Press de pecho en máquina": 5,
-    "Remo sentado en máquina": 10,
-    "Jalón al pecho": 10,
-    "Press de hombros en máquina": 5,
-    "Curl femoral en máquina": 5,
-  };
-  if (
-    p.experience === "inicio" &&
-    p.equipment === "gimnasio" &&
-    p.limitations === "ninguna" &&
-    p.age !== undefined &&
-    p.age < 65 &&
-    trials[ex.name] !== undefined
-  ) {
-    const kg = trials[ex.name];
-    return {
-      reps,
-      kg,
-      kind: "prueba",
-      label:
-        ex.name === "Prensa de piernas"
-          ? `${kg} kg indicados SOLO en prensa horizontal con selector; otra prensa: mínima carga con el entrenador`
-          : `${kg} kg indicados en máquina con selector, como prueba inicial`,
-    };
-  }
+  if (assessment || !ex.externalLoad)
+    return assessedPrescription(ex, assessment);
   return {
-    reps,
+    reps: ex.min,
     kg: undefined,
+    status: "pendiente",
     kind: "calibrar",
-    label: "Carga mínima del equipo; comprueba el esfuerzo antes de aumentarla",
+    label: previous
+      ? `Registro previo: ${previous.kg} kg; falta evaluar esfuerzo, equipo y técnica antes de recomendarlo`
+      : "Pendiente: registra tu primera prueba de carga con el entrenador",
   };
 }

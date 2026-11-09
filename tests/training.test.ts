@@ -31,16 +31,11 @@ test("inicio en gimnasio: ambas rutinas y progresión gradual, sin cargas deduci
   );
 });
 
-test("punto de partida distingue cargas de prueba, registro real y peso corporal", () => {
+test("no se inventan cargas iniciales ni se convierten registros sin esfuerzo en recomendaciones", () => {
   const plan = buildTrainingPlan(profile),
     ex = plan.routines.A[1];
-  assert.equal(startingPrescription(ex, profile).kg, 5);
+  assert.equal(startingPrescription(ex, profile).kg, undefined);
   assert.equal(startingPrescription(ex, profile).reps, 8);
-  assert.equal(startingPrescription(ex, profile).kind, "prueba");
-  assert.deepEqual(
-    startingPrescription(ex, profile),
-    startingPrescription(ex, { ...profile, weightKg: 120 }),
-  );
   assert.equal(
     startingPrescription(ex, profile, {
       date: "2026-10-01",
@@ -49,13 +44,12 @@ test("punto de partida distingue cargas de prueba, registro real y peso corporal
       kg: 7.5,
       reps: 8,
     }).kg,
-    7.5,
+    undefined,
   );
   assert.equal(startingPrescription(plan.routines.A[3], profile).kg, 0);
-  assert.equal(startingPrescription(ex, { ...profile, age: 70 }).kg, undefined);
-  assert.match(
-    startingPrescription(plan.routines.A[0], profile).label,
-    /SOLO en prensa horizontal/,
+  assert.deepEqual(
+    startingPrescription(ex, profile),
+    startingPrescription(ex, { ...profile, weightKg: 120 }),
   );
 });
 test("no se genera una rutina sin confirmar molestias o con necesidad de revisión", () => {

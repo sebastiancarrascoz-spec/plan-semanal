@@ -1,6 +1,22 @@
 # Entrenamiento A/B e impresión
 
-## Corrección 0.6.1: punto de partida explícito
+## Vigente: versión 0.7, evaluación inicial
+
+Las cifras genéricas de 5 y 10 kg de 0.6.1 quedan retiradas. Tampoco se considera recomendación un registro antiguo que no identifica equipo, esfuerzo, dolor y revisión técnica. Los PDF personales anteriores con cifras genéricas quedan como versiones históricas, no como la carga vigente de la persona.
+
+`trainingAssessments` guarda evaluaciones por rutina, variante y equipo: fecha, kg efectivamente realizados, repeticiones, reserva estimada de 0 a 5 o más, dolor y técnica revisada por el entrenador. La primera sesión es submáxima; no calcula ni requiere 1RM. El entrenador elige una carga ligera y revisa ajustes. El protocolo de la plantilla propone probar 8 repeticiones, no llegar al fallo, descansar 90–120 segundos y limitar a dos ensayos por ejercicio. Se pueden distribuir las evaluaciones entre A y B en días separados.
+
+Una evaluación de 8–12 repeticiones, reserva 2–3, sin dolor y técnica revisada permite reutilizar esos mismos kg y repeticiones como punto inicial, solo en el mismo equipo y ajuste. Si aparece dolor, falta revisión técnica, el rango no se cumple o la reserva está fuera del objetivo, se solicita revisión o nueva prueba sin inventar una carga numérica. El resultado más reciente sustituye al anterior; un dolor posterior impide seguir mostrando la carga antigua como comprobada. Las fechas futuras son rechazadas. La calibración se muestra hasta hoy, independientemente del día de registro seleccionado en la cabecera.
+
+Se conserva todo el historial y el respaldo completo incluye las evaluaciones. El perfil inicial no agrega evaluaciones ficticias. La vista remota del nutricionista no añade estos campos a su permiso actual.
+
+El InBody importado se muestra con fecha, dispositivo, peso, masa muscular esquelética y grasa, tanto en Entrenar como en la impresión. Sirve para seguimiento conjunto de composición y rendimiento; no se transforma en una estimación de fuerza. Los informes adjuntos al chat requieren importación o registro explícitos en Progreso para existir en ese navegador.
+
+Fuente adicional: [AHA, declaración científica sobre entrenamiento de resistencia](https://pmc.ncbi.nlm.nih.gov/articles/PMC11209834/). Respalda la distinción entre carga, fuerza y prescripción individual; el protocolo de registro, el margen objetivo y los estados de la app son convenciones operativas y no equivalen a validación clínica individual.
+
+Verificación: 68 pruebas, incluidas evaluación válida, bloqueo por dolor/técnica, esfuerzo excesivo o insuficiente, fechas/unidades, prioridad temporal y conservación del estado. La impresión del navegador sigue pendiente de revisión visual.
+
+## Histórico 0.6.1: cifras retiradas en 0.7
 
 Se muestra una primera meta concreta de series × repeticiones y una columna con carga de prueba o último registro. Para adultos de 18–64 años que comienzan en gimnasio, sin molestias conocidas, la plantilla ofrece ensayos conservadores en máquinas con selector: pecho 5 kg, remo 10 kg, jalón 10 kg, hombros 5 kg y femoral 5 kg. Prensa: 10 kg únicamente si es horizontal con selector; otras prensas requieren calibración con el entrenador. Los ejercicios con peso corporal indican 0 kg externos. Son convenciones de prueba de la plantilla, no cargas derivadas del InBody, estimaciones de fuerza ni cifras clínicas validadas por las fuentes.
 

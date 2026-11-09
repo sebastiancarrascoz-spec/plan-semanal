@@ -1,6 +1,10 @@
 "use client";
 import { useState } from "react";
 import { Dumbbell, Printer } from "lucide-react";
+import { TrainingCalibration } from "./TrainingCalibration";
+import { latestAssessment, type TrainingAssessment } from "../lib/calibration";
+import { todayKey } from "../lib/purchases";
+import type { BodyScan } from "../lib/body";
 import type {
   TrainingProfile,
   WorkoutSet,
@@ -24,6 +28,9 @@ type Props = {
   recentWeight?: number;
   date: string;
   sets: WorkoutSet[];
+  assessments: TrainingAssessment[];
+  bodyScan?: BodyScan;
+  onAssessment: (a: TrainingAssessment) => void;
   onProfile: (p: TrainingProfile) => void;
   onSet: (s: WorkoutSet) => void;
 };
@@ -50,6 +57,13 @@ export function Training(props: Props) {
     plan = buildTrainingPlan(trainingDefaults);
   }
   const p = plan.profile;
+  const prescriptionFor = (ex: TrainingExercise, r: string) =>
+    startingPrescription(
+      ex,
+      p,
+      lastTrainingSet(props.sets, r, ex.name, props.date),
+      latestAssessment(props.assessments, r, ex.name, todayKey()),
+    );
   return (
     <div className="training-module">
       <div className="training-screen two-columns">
@@ -194,6 +208,14 @@ export function Training(props: Props) {
               registros no cambia al editar este perfil.
             </p>
           </section>
+          {!plan.needsReview && (
+            <TrainingCalibration
+              routines={plan.routines}
+              date={props.date}
+              records={props.assessments}
+              onSave={props.onAssessment}
+            />
+          )}
           <section className="card">
             <div className="section-title">
               <div>
@@ -267,13 +289,11 @@ export function Training(props: Props) {
                       <p>{ex.cue}</p>
                       <p className="scope-note">
                         <strong>
-                          Punto de partida: {plan.sets} × {ex.min}
+                          Punto de partida: {plan.sets} ×{" "}
+                          {prescriptionFor(ex, routine).reps}
                           {ex.eachSide ? " por lado" : " repeticiones"}.
                         </strong>{" "}
-                        {startingPrescription(ex, p, previous).label}.{" "}
-                        {previous
-                          ? ""
-                          : "Carga de prueba, todavía no comprobada en tu sesión."}
+                        {prescriptionFor(ex, routine).label}.
                       </p>
                       {canProgress(logged, ex, plan.sets) && (
                         <div className="success-note">
@@ -286,7 +306,7 @@ export function Training(props: Props) {
                       )}
                       <form
                         className="set-form"
-                        key={`${routine}-${ex.name}-${props.date}`}
+                        key={`${routine}-${ex.name}-${props.date}-${latestAssessment(props.assessments, routine, ex.name, todayKey())?.id || "pendiente"}`}
                         onSubmit={(e) => {
                           e.preventDefault();
                           const d = new FormData(e.currentTarget);
@@ -319,7 +339,9 @@ export function Training(props: Props) {
                               min="0"
                               max="500"
                               step="0.1"
-                              defaultValue={previous?.kg ?? ""}
+                              defaultValue={
+                                prescriptionFor(ex, routine).kg ?? ""
+                              }
                               required
                             />
                           </label>
@@ -336,7 +358,7 @@ export function Training(props: Props) {
                             min="1"
                             max="120"
                             step="1"
-                            defaultValue={ex.min}
+                            defaultValue={prescriptionFor(ex, routine).reps}
                             required
                           />
                         </label>
@@ -362,6 +384,33 @@ export function Training(props: Props) {
           </section>
         </section>
         <aside>
+          <section className="card">
+            <h2>Tu composición corporal</h2>
+            {props.bodyScan ? (
+              <>
+                <p>
+                  {props.bodyScan.device} · {props.bodyScan.date}
+                </p>
+                <p>
+                  Peso: {props.bodyScan.metrics.weightKg ?? "—"} kg · Músculo
+                  esquelético: {props.bodyScan.metrics.skeletalMuscleKg ?? "—"}{" "}
+                  kg · Grasa: {props.bodyScan.metrics.bodyFatPercent ?? "—"} %
+                </p>
+                <p>
+                  Seguiremos estos valores junto con cintura y rendimiento. El
+                  objetivo es revisar la conservación muscular y el cambio de
+                  grasa con tu profesional; estos kg de músculo no se convierten
+                  en carga de una máquina.
+                </p>
+              </>
+            ) : (
+              <p>
+                Importa o registra tu InBody en Progreso para ver aquí su fecha,
+                equipo y composición corporal. Los informes del chat no se
+                cargan automáticamente en el navegador.
+              </p>
+            )}
+          </section>
           <section className="card">
             <h2>Lleva tu plan al gimnasio</h2>
             <p>
@@ -401,18 +450,18 @@ export function Training(props: Props) {
             </p>
             <h3>Elige la carga</h3>
             <p>
-              Las cifras iniciales son ensayos conservadores de la plantilla, no
-              una medición de fuerza ni un cálculo desde el InBody. Solo aplican
-              a máquinas con selector de placas. Si el equipo es distinto o no
-              permite esa carga, pide al entrenador una prueba con su mínimo; no
-              elijas una carga mayor por obligación.
+              La app espera una evaluación por ejercicio y equipo antes de
+              mostrar una carga personal. En Calibra tus cargas registra una
+              prueba real; el último peso anotado sin esfuerzo y revisión
+              técnica se conserva como historial, no como recomendación.
             </p>
             <p>
               Prueba 8 repeticiones. Si cuesta llegar a 8, pierdes técnica o no
               te quedan 2–3 posibles, baja la carga. Si podrías hacer más de 5
               adicionales con facilidad, descansa 90–120 segundos y prueba un
               solo incremento pequeño. Haz como máximo dos pruebas; registra la
-              carga que sí comprobaste, aunque sea diferente de la sugerida.
+              carga que sí comprobaste. El entrenador elige la primera carga del
+              equipo, sin una cifra inventada por la app.
             </p>
             <p>
               Empieza con una carga ligera. Si no llegas al mínimo de
@@ -474,6 +523,14 @@ export function Training(props: Props) {
                     ? "Altura: ____"
                     : `${p.heightCm} cm`}
                 </p>
+                {props.bodyScan && (
+                  <p>
+                    InBody de referencia: {props.bodyScan.date} ·{" "}
+                    {props.bodyScan.device} · músculo esquelético{" "}
+                    {props.bodyScan.metrics.skeletalMuscleKg ?? "—"} kg · grasa{" "}
+                    {props.bodyScan.metrics.bodyFatPercent ?? "—"} %
+                  </p>
+                )}
                 <p>
                   Semana {p.week}/12 ·{" "}
                   {p.experience === "inicio"
@@ -513,7 +570,7 @@ export function Training(props: Props) {
                   <tr>
                     <th>Ejercicio y técnica</th>
                     <th>Reps</th>
-                    <th>Carga de inicio o último registro</th>
+                    <th>Carga evaluada y equipo</th>
                     {[1, 2, 3].map((n) => (
                       <th key={n}>
                         Serie {n}
@@ -531,19 +588,11 @@ export function Training(props: Props) {
                         <small>{ex.cue}</small>
                       </td>
                       <td>
-                        {plan.sets} × {ex.min}
+                        {plan.sets} × {prescriptionFor(ex, r).reps}
                         {ex.eachSide ? " por lado" : " reps"}
                         <small>Después: {target(ex)}</small>
                       </td>
-                      <td>
-                        {
-                          startingPrescription(
-                            ex,
-                            p,
-                            lastTrainingSet(props.sets, r, ex.name, props.date),
-                          ).label
-                        }
-                      </td>
+                      <td>{prescriptionFor(ex, r).label}</td>
                       {[1, 2, 3].map((n) => (
                         <td key={n}>
                           {n > plan.sets
@@ -559,14 +608,14 @@ export function Training(props: Props) {
               </table>
               <p>
                 <strong>
-                  Las cargas numéricas son de prueba, no fuerza estimada por
+                  La carga personal procede de una evaluación registrada, no del
                   InBody.
                 </strong>{" "}
-                Solo máquinas con selector; otra máquina requiere calibración
-                con el entrenador. Prueba 8 reps: si no quedan 2–3 posibles,
-                baja carga. Si quedan más de 5 con facilidad, descansa 90–120 s
-                y prueba el menor incremento, máximo dos ensayos. No registres
-                una sugerencia como carga realizada.
+                Repite solo en el equipo y ajuste evaluados. Si falta la
+                evaluación, lleva esta hoja al entrenador para calibrar. Prueba
+                8 reps, conservando 2–3 posibles, sin dolor y con técnica
+                revisada; si eso cambia, vuelve a evaluar. No busques una
+                repetición máxima.
               </p>
               <p>
                 <strong>Cómo progresar:</strong> primero completa el rango con

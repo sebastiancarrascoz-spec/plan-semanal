@@ -2,6 +2,10 @@
 
 App personal en español de Chile para seguir un plan por porciones. Es una demo funcional con persistencia local y adaptador Supabase opcional. No diagnostica ni prescribe tratamientos.
 
+## Versión 0.7: calibración antes de recomendar cargas
+
+Entrenar incorpora la primera evaluación por ejercicio: equipo y ajuste, kg realizados, repeticiones, margen de repeticiones, dolor y revisión técnica. Solo una prueba dentro del rango, sin dolor y con técnica revisada genera una carga comprobada, con su equipo y fecha. La rutina impresa utiliza esa carga y las repeticiones evaluadas. Se retiran las cifras genéricas de 0.6.1. El InBody importado aparece como contexto de composición corporal, sin convertir músculo en kg de una máquina.
+
 ## Versión 0.6: entrenamiento imprimible
 
 Entrenar permite guardar edad, peso de referencia, altura, experiencia, equipamiento, molestias y semana del ciclo. Adapta las rutinas A/B y su volumen; no deduce cargas a partir del peso corporal. El botón **Imprimir A y B** prepara ambas rutinas con técnica, descansos, último registro y casillas de series. Se puede guardar como PDF desde el diálogo de impresión. Ver [alcance y fuentes](docs/ENTRENAMIENTO_V06.md).
