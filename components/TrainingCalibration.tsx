@@ -40,14 +40,16 @@ export function TrainingCalibration({
   );
   if (!rows.length) return null;
   return (
-    <section className="card training-profile">
+    <section className="card training-profile" id="calibracion">
       <span className="eyebrow blue">PRIMERA SESIÓN · CON TU ENTRENADOR</span>
       <h2>Calibra tus cargas</h2>
       <p>
         Esta evaluación no busca tu máximo ni llegar al fallo. Haz A y B en días
         separados. El entrenador ajusta la máquina, elige una carga ligera para
         ensayar y revisa tu técnica. Usa 8 repeticiones controladas y termina
-        con 2–3 posibles; si duele o pierdes técnica, detén la prueba.
+        con margen, orientativamente 2–3 posibles; una reserva mayor puede ser
+        un inicio suave. Es una estimación que necesita familiarización, no una
+        cifra exacta. Si duele o pierdes técnica, detén la prueba.
       </p>
       <p>
         Descansa 90–120 segundos entre ensayos. Como regla de esta app, limita a

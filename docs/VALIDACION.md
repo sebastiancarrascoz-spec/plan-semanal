@@ -1,5 +1,9 @@
 # Validación de la entrega
 
+## Seguimiento 0.8: 9 de noviembre de 2026
+
+86 pruebas, TypeScript estricto y compilación estática de producción satisfactorios. Se verifican progresión con dos fechas comparables, incertidumbre del RIR, bloqueo por dolor o recuperación, minutos reales separados de casillas, condiciones de bioimpedancia, revisión declarada vinculada a versión y resumen de 84 días sin inventar datos faltantes ni mezclar unidades o equipos. Las reglas y límites actuales están en [protocolo 0.8](PROTOCOLO_CIENTIFICO_V08.md); sustituyen el rechazo automático de una reserva mayor de tres de la versión 0.7. La revisión clínica profesional y la revisión visual de los nuevos flujos siguen pendientes. Las secciones anteriores describen verificaciones históricas y no acreditan el backend actual.
+
 ## Calibración 0.7: 9 de noviembre de 2026
 
 Se retiran las cargas genéricas. Siete nuevas pruebas verifican la evaluación inicial y su conservación; la prueba de 0.6.1 se sustituye por una regresión contra kg inventados o registros sin contexto. Total: 68 pruebas satisfactorias y TypeScript estricto. Se comprueba que una evaluación satisfactoria conserva los kg y las repeticiones realizados y explicita el equipo; dolor, técnica pendiente o esfuerzo fuera de objetivo impiden declararla comprobada. Revisión visual del diálogo de impresión todavía pendiente.

@@ -57,6 +57,10 @@ import { Purchases } from "../components/Purchases";
 import { BodyComposition } from "../components/BodyComposition";
 import { ProfessionalSummary } from "../components/ProfessionalSummary";
 import { Training } from "../components/Training";
+import { ActivityTracker } from "../components/ActivityTracker";
+import { ReviewPanel } from "../components/ReviewPanel";
+import { FollowUpReport } from "../components/FollowUpReport";
+import { currentReview, reviewSnapshot } from "../lib/protocol";
 import { todayKey } from "../lib/purchases";
 import { mergeBodyScans } from "../lib/body";
 import { connectCloud } from "../lib/cloud";
@@ -106,6 +110,13 @@ export default function Home() {
     [linkCode, setLinkCode] = useState("");
   const current = useRef(s);
   current.current = s;
+  const trainingReview = currentReview(
+    s.reviews || [],
+    reviewSnapshot("entrenamiento", s.plan, {
+      profile: s.trainingProfile,
+      assessments: s.trainingAssessments || [],
+    }),
+  );
   const stamp = useRef("");
   const dirty = useRef(false);
   const syncBusy = useRef(false);
@@ -967,6 +978,44 @@ export default function Home() {
               }
               date={date}
               sets={s.sets}
+              reviewLabel={
+                trainingReview
+                  ? `${trainingReview.name} · ${trainingReview.date} · ${trainingReview.outcome === "revisado" ? "revisión declarada" : "ajustes pendientes"}; credenciales no verificadas`
+                  : "Sin revisión profesional registrada de la versión actual"
+              }
+              activity={
+                <ActivityTracker
+                  date={date}
+                  logs={s.activityLogs || []}
+                  sedentary={s.sedentaryLogs || {}}
+                  goal={s.activityGoalMinutes ?? 150}
+                  onAdd={(a) =>
+                    update((p) => ({
+                      ...p,
+                      activityLogs: [...(p.activityLogs || []), a],
+                    }))
+                  }
+                  onRemove={(id) =>
+                    update((p) => ({
+                      ...p,
+                      activityLogs: (p.activityLogs || []).filter(
+                        (a) => a.id !== id,
+                      ),
+                    }))
+                  }
+                  onSedentary={(d, entry) =>
+                    update((p) => {
+                      const logs = { ...(p.sedentaryLogs || {}) };
+                      if (entry) logs[d] = entry;
+                      else delete logs[d];
+                      return { ...p, sedentaryLogs: logs };
+                    })
+                  }
+                  onGoal={(activityGoalMinutes) =>
+                    update((p) => ({ ...p, activityGoalMinutes }))
+                  }
+                />
+              }
               assessments={s.trainingAssessments || []}
               bodyScan={[...s.bodyScans]
                 .filter((x) => x.date <= todayKey())
@@ -990,186 +1039,204 @@ export default function Home() {
             />
           )}
           {tab === "Progreso" && (
-            <div className="two-columns">
-              <section>
-                <BodyComposition
-                  scans={s.bodyScans}
-                  canImport={s.consent}
-                  onSave={(scans) => {
-                    update((p) => ({
-                      ...p,
-                      bodyScans: mergeBodyScans(p.bodyScans, scans),
-                    }));
-                    notify("Exámenes de composición corporal guardados.");
-                  }}
-                />
-                <div className="card">
-                  <div className="section-title">
-                    <div>
-                      <h2>Tu cintura, en perspectiva</h2>
-                      <p>Registro semanal · centímetros</p>
-                    </div>
-                    <button
-                      className="button"
-                      onClick={() => setModal("Medición")}
-                    >
-                      <Plus size={17} />
-                      Registrar
-                    </button>
-                  </div>
-                  {s.measurements.length ? (
-                    <>
-                      <div className="metric">
-                        <strong>
-                          {
-                            [...s.measurements]
-                              .sort((a, b) => a.date.localeCompare(b.date))
-                              .at(-1)?.waist
-                          }
-                        </strong>
-                        <span>cm · última medición</span>
+            <>
+              <FollowUpReport state={s} />
+              <ReviewPanel
+                records={s.reviews || []}
+                plan={s.plan}
+                training={{
+                  profile: s.trainingProfile,
+                  assessments: s.trainingAssessments || [],
+                }}
+                onSave={(r) => {
+                  update((p) => ({ ...p, reviews: [...(p.reviews || []), r] }));
+                  notify(
+                    "Revisión declarada guardada; no equivale a firma clínica.",
+                  );
+                }}
+              />
+              <div className="two-columns">
+                <section>
+                  <BodyComposition
+                    scans={s.bodyScans}
+                    canImport={s.consent}
+                    onSave={(scans) => {
+                      update((p) => ({
+                        ...p,
+                        bodyScans: mergeBodyScans(p.bodyScans, scans),
+                      }));
+                      notify("Exámenes de composición corporal guardados.");
+                    }}
+                  />
+                  <div className="card">
+                    <div className="section-title">
+                      <div>
+                        <h2>Tu cintura, en perspectiva</h2>
+                        <p>Registro semanal · centímetros</p>
                       </div>
-                      <ProgressChart
-                        values={[...s.measurements]
-                          .sort((a, b) => a.date.localeCompare(b.date))
-                          .map((x) => ({ label: x.date, value: x.waist }))}
-                      />
-                      <h3>Peso · kilogramos</h3>
-                      <ProgressChart
-                        label="Peso en kilogramos"
-                        values={[...s.measurements]
-                          .sort((a, b) => a.date.localeCompare(b.date))
-                          .map((x) => ({ label: x.date, value: x.weight }))}
-                      />
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Fecha</th>
-                            <th>Cintura</th>
-                            <th>Peso</th>
-                            <th>Grasa</th>
-                            <th>Visceral</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {[...s.measurements]
-                            .sort((a, b) => b.date.localeCompare(a.date))
-                            .map((x, i) => (
-                              <tr key={i}>
-                                <td>{x.date}</td>
-                                <td>{x.waist} cm</td>
-                                <td>{x.weight} kg</td>
-                                <td>{x.fat ? `${x.fat}%` : "—"}</td>
-                                <td>{x.visceral ?? "—"}</td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                    </>
-                  ) : (
-                    <div className="empty-state">
-                      <ChartNoAxesCombined size={36} />
-                      <h3>Tu primer registro es el punto de partida.</h3>
-                      <p>
-                        Mide tu cintura y tu peso. Aquí verás cómo cambian con
-                        el tiempo.
-                      </p>
                       <button
-                        className="button outline"
+                        className="button"
                         onClick={() => setModal("Medición")}
                       >
-                        Agregar primera medición
+                        <Plus size={17} />
+                        Registrar
                       </button>
                     </div>
-                  )}
-                </div>
-                <div className="card lab-card">
-                  <div className="section-title">
-                    <div>
-                      <h2>Exámenes</h2>
-                      <p>Compara tus resultados con tu profesional.</p>
-                    </div>
-                    <button
-                      className="icon-button"
-                      aria-label="Registrar examen"
-                      onClick={() => setModal("Examen")}
-                    >
-                      <Plus size={20} />
-                    </button>
-                  </div>
-                  {s.labs.length ? (
-                    s.labs.map((x, i) => (
-                      <div className="lab-row" key={i}>
-                        <div>
-                          <strong>{x.type}</strong>
-                          <small>
-                            {x.date} · revisar desde{" "}
-                            {new Date(
-                              new Date(x.date + "T12:00:00").getTime() +
-                                84 * 86400000,
-                            ).toLocaleDateString("es-CL")}
-                          </small>
+                    {s.measurements.length ? (
+                      <>
+                        <div className="metric">
+                          <strong>
+                            {
+                              [...s.measurements]
+                                .sort((a, b) => a.date.localeCompare(b.date))
+                                .at(-1)?.waist
+                            }
+                          </strong>
+                          <span>cm · última medición</span>
                         </div>
-                        <span>
-                          {x.value} {x.unit}
-                        </span>
-                      </div>
-                    ))
-                  ) : (
-                    <p>
-                      Aún no hay exámenes. Puedes agregarlos cuando los tengas.
-                    </p>
-                  )}
-                </div>
-              </section>
-              <aside>
-                <section className="card">
-                  <h2>Tu constancia semanal</h2>
-                  <div className="metric">
-                    <strong>{percent}%</strong>
-                  </div>
-                  <p>
-                    {done} de 49 comidas y caminatas. Agua y sueño se registran
-                    por separado.
-                  </p>
-                  <div className="week-bars">
-                    {days.map((d, i) => (
-                      <div key={d}>
-                        <span
-                          style={{
-                            height: Math.max(4, (countDay(i) / 7) * 90),
-                          }}
+                        <ProgressChart
+                          values={[...s.measurements]
+                            .sort((a, b) => a.date.localeCompare(b.date))
+                            .map((x) => ({ label: x.date, value: x.waist }))}
                         />
-                        <small>{d}</small>
+                        <h3>Peso · kilogramos</h3>
+                        <ProgressChart
+                          label="Peso en kilogramos"
+                          values={[...s.measurements]
+                            .sort((a, b) => a.date.localeCompare(b.date))
+                            .map((x) => ({ label: x.date, value: x.weight }))}
+                        />
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Fecha</th>
+                              <th>Cintura</th>
+                              <th>Peso</th>
+                              <th>Grasa</th>
+                              <th>Visceral</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {[...s.measurements]
+                              .sort((a, b) => b.date.localeCompare(a.date))
+                              .map((x, i) => (
+                                <tr key={i}>
+                                  <td>{x.date}</td>
+                                  <td>{x.waist} cm</td>
+                                  <td>{x.weight} kg</td>
+                                  <td>{x.fat ? `${x.fat}%` : "—"}</td>
+                                  <td>{x.visceral ?? "—"}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </>
+                    ) : (
+                      <div className="empty-state">
+                        <ChartNoAxesCombined size={36} />
+                        <h3>Tu primer registro es el punto de partida.</h3>
+                        <p>
+                          Mide tu cintura y tu peso. Aquí verás cómo cambian con
+                          el tiempo.
+                        </p>
+                        <button
+                          className="button outline"
+                          onClick={() => setModal("Medición")}
+                        >
+                          Agregar primera medición
+                        </button>
                       </div>
-                    ))}
+                    )}
                   </div>
-                  <p>Una semana difícil no borra lo que ya hiciste.</p>
-                  <button
-                    className="button outline"
-                    onClick={() => window.print()}
-                  >
-                    <Download size={16} />
-                    Guardar semana como PDF
-                  </button>
+                  <div className="card lab-card">
+                    <div className="section-title">
+                      <div>
+                        <h2>Exámenes</h2>
+                        <p>Compara tus resultados con tu profesional.</p>
+                      </div>
+                      <button
+                        className="icon-button"
+                        aria-label="Registrar examen"
+                        onClick={() => setModal("Examen")}
+                      >
+                        <Plus size={20} />
+                      </button>
+                    </div>
+                    {s.labs.length ? (
+                      s.labs.map((x, i) => (
+                        <div className="lab-row" key={i}>
+                          <div>
+                            <strong>{x.type}</strong>
+                            <small>
+                              {x.date} · revisar desde{" "}
+                              {new Date(
+                                new Date(x.date + "T12:00:00").getTime() +
+                                  84 * 86400000,
+                              ).toLocaleDateString("es-CL")}
+                            </small>
+                          </div>
+                          <span>
+                            {x.value} {x.unit}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <p>
+                        Aún no hay exámenes. Puedes agregarlos cuando los
+                        tengas.
+                      </p>
+                    )}
+                  </div>
                 </section>
-                <section className="education">
-                  <h3>Los triglicéridos pueden cambiar.</h3>
-                  <p>
-                    La alimentación, el movimiento y otras condiciones influyen
-                    en sus niveles. Revisa los resultados con tu profesional: no
-                    reemplazan una evaluación médica.
-                  </p>
-                  <a
-                    href="https://www.nhlbi.nih.gov/health/high-blood-triglycerides"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Fuente: NHLBI <ArrowUpRight size={13} />
-                  </a>
-                </section>
-              </aside>
-            </div>
+                <aside>
+                  <section className="card">
+                    <h2>Tu constancia semanal</h2>
+                    <div className="metric">
+                      <strong>{percent}%</strong>
+                    </div>
+                    <p>
+                      {done} de 49 comidas y caminatas. Agua y sueño se
+                      registran por separado.
+                    </p>
+                    <div className="week-bars">
+                      {days.map((d, i) => (
+                        <div key={d}>
+                          <span
+                            style={{
+                              height: Math.max(4, (countDay(i) / 7) * 90),
+                            }}
+                          />
+                          <small>{d}</small>
+                        </div>
+                      ))}
+                    </div>
+                    <p>Una semana difícil no borra lo que ya hiciste.</p>
+                    <button
+                      className="button outline"
+                      onClick={() => window.print()}
+                    >
+                      <Download size={16} />
+                      Guardar semana como PDF
+                    </button>
+                  </section>
+                  <section className="education">
+                    <h3>Los triglicéridos pueden cambiar.</h3>
+                    <p>
+                      La alimentación, el movimiento y otras condiciones
+                      influyen en sus niveles. Revisa los resultados con tu
+                      profesional: no reemplazan una evaluación médica.
+                    </p>
+                    <a
+                      href="https://www.nhlbi.nih.gov/health/high-blood-triglycerides"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Fuente: NHLBI <ArrowUpRight size={13} />
+                    </a>
+                  </section>
+                </aside>
+              </div>
+            </>
           )}
           <footer>
             <ShieldCheck size={15} />

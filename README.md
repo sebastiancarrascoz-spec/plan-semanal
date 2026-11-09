@@ -1,5 +1,9 @@
 # Mi Semana
 
+## Versión 0.8: seguimiento con fuentes y contexto
+
+Entrenar incorpora reglas con fuentes y población de referencia, progresión basada en dos sesiones comparables y registro de minutos reales y pausas. Progreso permite registrar condiciones del InBody, una revisión profesional declarada vinculada a la versión exacta del plan y un resumen imprimible de 12 semanas. No se deducen cargas del InBody ni se presenta el protocolo como validado clínicamente. Ver [reglas, fuentes y límites](docs/PROTOCOLO_CIENTIFICO_V08.md). La reserva de repeticiones es aproximada: un inicio suave con más de tres repeticiones en reserva ya no se rechaza automáticamente.
+
 App personal en español de Chile para seguir un plan por porciones. Es una demo funcional con persistencia local y adaptador Supabase opcional. No diagnostica ni prescribe tratamientos.
 
 ## Versión 0.7: calibración antes de recomendar cargas

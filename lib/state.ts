@@ -8,7 +8,9 @@ import {
   dateForDay,
 } from "./engine.ts";
 import type { BodyScan } from "./body.ts";
-import type { TrainingProfile } from "./training.ts";
+import type { TrainingProfile, WorkoutSet } from "./training.ts";
+import type { ReviewRecord } from "./protocol.ts";
+import type { ActivityLog, SedentaryLog } from "./activity.ts";
 import type { TrainingAssessment } from "./calibration.ts";
 import type { Cart } from "./cart.ts";
 import { todayKey, type PurchaseBasket } from "./purchases.ts";
@@ -40,6 +42,10 @@ export type State = {
   measurements: Measurement[];
   trainingProfile?: TrainingProfile;
   trainingAssessments?: TrainingAssessment[];
+  reviews?: ReviewRecord[];
+  activityLogs?: ActivityLog[];
+  activityGoalMinutes?: number;
+  sedentaryLogs?: Record<string, SedentaryLog>;
   bodyScans: BodyScan[];
   carts: Record<string, Cart>;
   shoppingStart: string;
@@ -48,13 +54,7 @@ export type State = {
   preparedBatches: PreparedBatch[];
   kitchenEvents: Record<string, KitchenEvent>;
   labs: { date: string; type: string; value: number; unit: string }[];
-  sets: {
-    date: string;
-    routine: string;
-    exercise: string;
-    kg: number;
-    reps: number;
-  }[];
+  sets: WorkoutSet[];
   reminders: { enabled: boolean; time: string };
   dark: boolean;
   large: boolean;

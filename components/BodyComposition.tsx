@@ -8,7 +8,10 @@ import {
   parseBodyImport,
   type BodyMetric,
   type BodyScan,
+  bodyConditionFields,
+  type BodyConditions,
 } from "../lib/body";
+import { bodyComparison } from "../lib/body-quality";
 export function BodyComposition({
   scans,
   onSave,
@@ -105,6 +108,12 @@ export function BodyComposition({
                 source: "manual",
                 metrics,
                 notes: d.get("notes"),
+                conditions: Object.fromEntries(
+                  Object.keys(bodyConditionFields).map((k) => [
+                    k,
+                    d.get(`condition-${k}`) || "no_registrado",
+                  ]),
+                ),
               });
               onSave?.([scan]);
               setEditing(false);
@@ -191,8 +200,9 @@ export function BodyComposition({
                 ))}
             </div>
           </details>
+          <BodyConditionInputs />
           <label>
-            Condiciones de la medición (opcional)
+            Otras condiciones de la medición (opcional)
             <input
               name="notes"
               maxLength={500}
@@ -295,6 +305,16 @@ export function BodyComposition({
                   {bodyMetrics[metric].unit}
                 </strong>
               </p>
+              <p className="scope-note">
+                {bodyComparison(ordered[0], ordered.at(-1)!).text}{" "}
+                <a
+                  href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11649400/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Fundamento · regla P06
+                </a>
+              </p>
             </>
           ) : (
             <p className="scope-note">
@@ -308,6 +328,46 @@ export function BodyComposition({
               <ScanDetails key={scan.id} scan={scan} />
             ))}
           </div>
+          {!readOnly && latest && (
+            <details className="body-form">
+              <summary>
+                Completar condiciones del último examen sin cambiar sus
+                resultados
+              </summary>
+              <form
+                key={latest.id}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  try {
+                    const d = new FormData(e.currentTarget);
+                    onSave?.([
+                      validateBodyScan({
+                        ...latest,
+                        conditions: Object.fromEntries(
+                          Object.keys(bodyConditionFields).map((k) => [
+                            k,
+                            d.get(`condition-${k}`) || "no_registrado",
+                          ]),
+                        ),
+                      }),
+                    ]);
+                    setError("");
+                  } catch (err) {
+                    setError(
+                      err instanceof Error
+                        ? err.message
+                        : "Revisa las condiciones",
+                    );
+                  }
+                }}
+              >
+                <BodyConditionInputs values={latest.conditions} />
+                <button className="button outline">
+                  Guardar condiciones declaradas
+                </button>
+              </form>
+            </details>
+          )}
         </>
       ) : (
         <div className="empty-state">
@@ -352,6 +412,17 @@ function ScanDetails({
         {scan.time ? " · " + scan.time : ""} — {scan.device}
       </summary>
       <dl>
+        {Object.entries(bodyConditionFields).map(([key, field]) => (
+          <div key={key}>
+            <dt>{field.label}</dt>
+            <dd>
+              {(field.options as Record<string, string>)[
+                scan.conditions?.[key as keyof BodyConditions] ||
+                  "no_registrado"
+              ] || "No registrado"}
+            </dd>
+          </div>
+        ))}
         {(Object.keys(bodyMetrics) as BodyMetric[])
           .filter((k) => scan.metrics[k] !== undefined)
           .map((k) => (
@@ -431,6 +502,37 @@ function ScanDetails({
       )}
       {scan.notes && <p>{scan.notes}</p>}
     </details>
+  );
+}
+function BodyConditionInputs({ values }: { values?: BodyConditions }) {
+  return (
+    <fieldset className="condition-fields">
+      <legend>Condiciones declaradas del examen</legend>
+      <p>
+        Usa «No registrado» cuando no lo sepas. Sigue la preparación indicada
+        por tu clínica; no cambies hidratación o comidas solo para mejorar el
+        resultado.
+      </p>
+      <div className="form-grid">
+        {Object.entries(bodyConditionFields).map(([key, field]) => (
+          <label key={key}>
+            {field.label}
+            <select
+              name={`condition-${key}`}
+              defaultValue={
+                values?.[key as keyof BodyConditions] || "no_registrado"
+              }
+            >
+              {Object.entries(field.options).map(([v, label]) => (
+                <option key={v} value={v}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ))}
+      </div>
+    </fieldset>
   );
 }
 function BodyTrend({

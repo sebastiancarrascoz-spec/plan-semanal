@@ -116,7 +116,7 @@ export function assessedPrescription(
       reps: ex.min,
       label: `${a.kg} kg resultaron exigentes en ${a.equipment}; prueba una carga menor con el entrenador y registra el resultado`,
     };
-  if (a.reps > ex.max || a.reserve > 3)
+  if (a.reps > ex.max)
     return {
       status: "ajustar",
       kg: undefined,
@@ -127,6 +127,6 @@ export function assessedPrescription(
     status: "comprobada",
     kg: a.kg,
     reps: a.reps,
-    label: `Inicio comprobado: ${a.kg} kg × ${a.reps} reps · SOLO ${a.equipment} · evaluación ${a.date}. Revisa el esfuerzo en cada sesión`,
+    label: `Referencia registrada: ${a.kg} kg × ${a.reps} reps · SOLO ${a.equipment} · evaluación ${a.date}. Reserva estimada: ${a.reserve === 5 ? "5 o más" : a.reserve}. ${a.reserve > 3 ? "Inicio suave; revisa la dificultad con tu entrenador." : "Revisa el esfuerzo en cada sesión."}`,
   };
 }

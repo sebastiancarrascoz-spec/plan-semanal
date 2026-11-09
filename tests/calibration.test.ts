@@ -51,13 +51,17 @@ test("esfuerzo excesivo o insuficiente pide nueva prueba sin inventar kg", () =>
     { reserve: 0 },
     { reserve: 1 },
     { reps: 6 },
-    { reserve: 5 },
     { reps: 20 },
   ])
     assert.equal(
       assessedPrescription(ex, { ...record, ...patch }).kg,
       undefined,
     );
+});
+test("una reserva mayor admite inicio suave sin fingir precisión", () => {
+  const p = assessedPrescription(ex, { ...record, reserve: 5 });
+  assert.equal(p.kg, 7.5);
+  assert.match(p.label, /Inicio suave/);
 });
 test("validación rechaza fechas futuras y valores no válidos", () => {
   for (const patch of [

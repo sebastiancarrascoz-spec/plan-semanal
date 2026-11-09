@@ -3053,3 +3053,97 @@ footer {
     margin-top: 12px;
   }
 }
+.evidence-detail {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+}
+.session-context {
+  grid-column: 1 / -1;
+  padding: 10px 0;
+}
+.session-context .form-grid {
+  margin-top: 12px;
+}
+.session-context label {
+  display: grid;
+  gap: 7px;
+}
+.condition-fields {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 16px 0;
+  padding: 14px;
+}
+.condition-fields label {
+  display: grid;
+  gap: 8px;
+}
+.training-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.training-jumps a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.progress-report .table-scroll {
+  overflow: auto;
+}
+.report-print {
+  display: none;
+}
+@media print {
+  .review-form,
+  .session-context,
+  .training-jumps {
+    display: none !important;
+  }
+  body:has(.progress-report[data-print="true"]) .page-heading,
+  body:has(.progress-report[data-print="true"]) .two-columns,
+  body:has(.progress-report[data-print="true"]) .review-panel,
+  body:has(.progress-report[data-print="true"]) .content > footer,
+  body:has(.progress-report[data-print="true"]) .report-screen {
+    display: none !important;
+  }
+  .progress-report[data-print="true"] {
+    break-inside: auto;
+    padding: 0;
+    border: none;
+  }
+  .progress-report[data-print="true"] .report-print {
+    display: block;
+    font-size: 10pt;
+    color: #16262b;
+    line-height: 1.4;
+  }
+  .report-print .table-scroll {
+    overflow: visible;
+  }
+  .report-print table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8pt;
+  }
+  .report-print th,
+  .report-print td {
+    border: 1px solid #8a9995;
+    padding: 6px;
+    color: #16262b;
+    background: #fff;
+  }
+  .report-print tr {
+    break-inside: avoid;
+  }
+  .report-print h3 {
+    break-after: avoid;
+  }
+  .report-print p, .report-print h2, .report-print h3, .report-print h4 { color: #16262b; }
+}

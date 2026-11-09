@@ -1,10 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Dumbbell, Printer } from "lucide-react";
 import { TrainingCalibration } from "./TrainingCalibration";
 import { latestAssessment, type TrainingAssessment } from "../lib/calibration";
 import { todayKey } from "../lib/purchases";
 import type { BodyScan } from "../lib/body";
+import { ProtocolPanel } from "./ProtocolPanel";
+import { PROTOCOL_VERSION } from "../lib/protocol";
+import { progressionAdvice } from "../lib/progression";
 import type {
   TrainingProfile,
   WorkoutSet,
@@ -31,6 +34,8 @@ type Props = {
   assessments: TrainingAssessment[];
   bodyScan?: BodyScan;
   onAssessment: (a: TrainingAssessment) => void;
+  reviewLabel: string;
+  activity: ReactNode;
   onProfile: (p: TrainingProfile) => void;
   onSet: (s: WorkoutSet) => void;
 };
@@ -57,18 +62,36 @@ export function Training(props: Props) {
     plan = buildTrainingPlan(trainingDefaults);
   }
   const p = plan.profile;
-  const prescriptionFor = (ex: TrainingExercise, r: string) =>
-    startingPrescription(
+  const prescriptionFor = (ex: TrainingExercise, r: string) => {
+    const feedback = progressionAdvice(
+      props.sets,
+      r,
+      ex,
+      plan.sets,
+      todayKey(),
+    );
+    if (["dolor", "tecnica", "recuperar", "revisar"].includes(feedback.status))
+      return { kg: undefined, reps: ex.min, label: feedback.text };
+    return startingPrescription(
       ex,
       p,
       lastTrainingSet(props.sets, r, ex.name, props.date),
       latestAssessment(props.assessments, r, ex.name, todayKey()),
     );
+  };
   return (
     <div className="training-module">
       <div className="training-screen two-columns">
         <section>
           <section className="card training-profile">
+            <nav
+              className="training-jumps"
+              aria-label="Secciones de entrenamiento"
+            >
+              <a href="#calibracion">Calibrar</a>
+              <a href="#rutinas-entrenamiento">Rutinas</a>
+              <a href="#actividad-real">Minutos y pausas</a>
+            </nav>
             <span className="eyebrow blue">TU PLAN DE FUERZA</span>
             <h2>Ajusta tu punto de partida</h2>
             <p>
@@ -216,7 +239,7 @@ export function Training(props: Props) {
               onSave={props.onAssessment}
             />
           )}
-          <section className="card">
+          <section className="card" id="rutinas-entrenamiento">
             <div className="section-title">
               <div>
                 <span className="eyebrow blue">
@@ -280,6 +303,13 @@ export function Training(props: Props) {
                       x.exercise === ex.name &&
                       x.date === props.date,
                   );
+                  const advice = progressionAdvice(
+                    props.sets,
+                    routine,
+                    ex,
+                    plan.sets,
+                    todayKey(),
+                  );
                   return (
                     <div className="exercise" key={`${routine}-${ex.name}`}>
                       <h3>{ex.name}</h3>
@@ -295,15 +325,20 @@ export function Training(props: Props) {
                         </strong>{" "}
                         {prescriptionFor(ex, routine).label}.
                       </p>
-                      {canProgress(logged, ex, plan.sets) && (
-                        <div className="success-note">
-                          Completaste las series al tope del rango. Si te
-                          quedaron 2–3 repeticiones posibles, no hubo dolor y
-                          mantuviste la técnica, prueba el menor aumento
-                          disponible la próxima sesión. Si no, conserva la
-                          carga.
-                        </div>
-                      )}
+                      <div className="scope-note">
+                        <strong>Tu siguiente paso:</strong> {advice.text}
+                        {advice.nextKg === undefined ? null : (
+                          <p>
+                            Escalón propuesto: {advice.nextKg} kg, solo si el
+                            incremento declarado coincide con el equipo y tu
+                            entrenador lo confirma.
+                          </p>
+                        )}
+                        <small>
+                          Regla {advice.rule} · decisión conservadora de la
+                          plantilla, protocolo {PROTOCOL_VERSION}.
+                        </small>
+                      </div>
                       <form
                         className="set-form"
                         key={`${routine}-${ex.name}-${props.date}-${latestAssessment(props.assessments, routine, ex.name, todayKey())?.id || "pendiente"}`}
@@ -327,6 +362,27 @@ export function Training(props: Props) {
                             exercise: ex.name,
                             kg,
                             reps,
+                            unit:ex.eachSide?"reps_lado":"reps",
+                            equipment:
+                              String(d.get("equipment") || "").trim() ||
+                              undefined,
+                            reserve:
+                              d.get("reserve") === ""
+                                ? undefined
+                                : Number(d.get("reserve")),
+                            pain:
+                              d.get("pain") === ""
+                                ? undefined
+                                : d.get("pain") === "si",
+                            techniqueReviewed:
+                              d.get("technique") === ""
+                                ? undefined
+                                : d.get("technique") === "si",
+                            recovery: (String(d.get("recovery") || "") ||
+                              undefined) as WorkoutSet["recovery"],
+                            incrementKg: String(d.get("increment") || "").trim()
+                              ? Number(d.get("increment"))
+                              : undefined,
                           });
                         }}
                       >
@@ -362,6 +418,83 @@ export function Training(props: Props) {
                             required
                           />
                         </label>
+                        <details className="session-context">
+                          <summary>
+                            Esfuerzo, equipo y recuperación · necesarios para
+                            progresar
+                          </summary>
+                          <div className="form-grid">
+                            <label>
+                              Equipo y ajuste
+                              <input
+                                name="equipment"
+                                maxLength={100}
+                                defaultValue={
+                                  latestAssessment(
+                                    props.assessments,
+                                    routine,
+                                    ex.name,
+                                    todayKey(),
+                                  )?.equipment ||
+                                  previous?.equipment ||
+                                  ""
+                                }
+                              />
+                            </label>
+                            <label>
+                              Repeticiones que quedaban (estimación)
+                              <select name="reserve" defaultValue="">
+                                <option value="">No sé / no registrado</option>
+                                {[0, 1, 2, 3, 4, 5].map((n) => (
+                                  <option value={n} key={n}>
+                                    {n === 5 ? "5 o más" : n}
+                                  </option>
+                                ))}
+                              </select>
+                            </label>
+                            <label>
+                              Dolor durante esta serie
+                              <select name="pain" defaultValue="">
+                                <option value="">No registrado</option>
+                                <option value="no">No</option>
+                                <option value="si">Sí</option>
+                              </select>
+                            </label>
+                            <label>
+                              Técnica revisada para este ejercicio
+                              <select name="technique" defaultValue="">
+                                <option value="">No registrado</option>
+                                <option value="si">Sí</option>
+                                <option value="no">Necesita revisión</option>
+                              </select>
+                            </label>
+                            <label>
+                              Recuperación para esta sesión
+                              <select name="recovery" defaultValue="">
+                                <option value="">No registrado</option>
+                                <option value="bien">Buena</option>
+                                <option value="regular">Regular</option>
+                                <option value="mala">Mala</option>
+                              </select>
+                            </label>
+                            <label>
+                              Menor incremento real del equipo (kg, opcional)
+                              <input
+                                name="increment"
+                                type="number"
+                                min="0.1"
+                                max="50"
+                                step="0.1"
+                                defaultValue={previous?.incrementKg ?? ""}
+                              />
+                            </label>
+                          </div>
+                          <p className="fineprint">
+                            No se inventa este contexto desde sesiones antiguas.
+                            Las repeticiones en reserva son una percepción con
+                            error, no una medición exacta.
+                          </p>
+                        </details>
                         <button className="button outline">
                           Registrar serie
                         </button>
@@ -384,6 +517,16 @@ export function Training(props: Props) {
           </section>
         </section>
         <aside>
+          {props.activity}
+          <ProtocolPanel />
+          <section className="card">
+            <h3>Revisión de tu versión</h3>
+            <p>{props.reviewLabel}</p>
+            <p>
+              Registra la revisión realizada en Progreso. No equivale a firma
+              clínica ni aprobación automática de cada aumento.
+            </p>
+          </section>
           <section className="card">
             <h2>Tu composición corporal</h2>
             {props.bodyScan ? (
@@ -548,6 +691,9 @@ export function Training(props: Props) {
                 <br />
                 <strong>Preparación:</strong> 5–8 min de caminata suave y
                 práctica liviana de los primeros ejercicios.
+              </p>
+              <p>
+                Protocolo {PROTOCOL_VERSION} · {props.reviewLabel}
               </p>
               <p>
                 <strong>

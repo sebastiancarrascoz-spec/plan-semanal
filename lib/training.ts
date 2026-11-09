@@ -14,6 +14,13 @@ export type WorkoutSet = {
   exercise: string;
   kg: number;
   reps: number;
+  equipment?: string;
+  reserve?: number;
+  pain?: boolean;
+  techniqueReviewed?: boolean;
+  recovery?: "bien" | "regular" | "mala";
+  incrementKg?: number;
+  unit?: "reps" | "reps_lado" | "segundos";
 };
 export type TrainingExercise = {
   name: string;

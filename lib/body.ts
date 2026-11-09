@@ -33,6 +33,36 @@ export const bodyMetrics = {
   heightCm: { label: "Altura del informe", unit: "cm", max: 250 },
 } as const;
 export type BodyMetric = keyof typeof bodyMetrics;
+export const bodyConditionFields = {
+  timeBand: {
+    label: "Horario de medición",
+    options: {
+      no_registrado: "No registrado",
+      manana: "Mañana",
+      tarde: "Tarde",
+      noche: "Noche",
+    },
+  },
+  recentExercise: {
+    label: "¿Ejercicio reciente antes del examen?",
+    options: { no_registrado: "No registrado", si: "Sí", no: "No" },
+  },
+  usualHydration: {
+    label: "¿Hidratación habitual según indicación de tu clínica?",
+    options: { no_registrado: "No registrado", si: "Sí", no: "No" },
+  },
+  mealTiming: {
+    label: "Comidas respecto de tu preparación habitual",
+    options: {
+      no_registrado: "No registrado",
+      habitual: "Preparación habitual",
+      diferente: "Diferente",
+    },
+  },
+} as const;
+export type BodyConditions = Partial<
+  Record<keyof typeof bodyConditionFields, string>
+>;
 export const segmentLabels = {
   rightArm: "Brazo derecho",
   leftArm: "Brazo izquierdo",
@@ -48,6 +78,7 @@ export type BodyScan = {
   source: "manual" | "importado";
   metrics: Partial<Record<BodyMetric, number>>;
   notes?: string;
+  conditions?: BodyConditions;
   segments?: Partial<
     Record<
       keyof typeof segmentLabels,
@@ -107,6 +138,21 @@ export function validateBodyScan(input: unknown): BodyScan {
     metrics,
     notes: typeof x.notes === "string" ? x.notes.slice(0, 500) : undefined,
   };
+  if (x.conditions && typeof x.conditions === "object") {
+    result.conditions = {};
+    for (const key of Object.keys(
+      bodyConditionFields,
+    ) as (keyof typeof bodyConditionFields)[]) {
+      const value = x.conditions[key];
+      if (value === undefined) continue;
+      if (
+        typeof value !== "string" ||
+        !Object.keys(bodyConditionFields[key].options).includes(value)
+      )
+        throw Error("Revisa las condiciones de medición.");
+      result.conditions[key] = value;
+    }
+  }
   if (x.segments && typeof x.segments === "object") {
     result.segments = {};
     for (const segment of Object.keys(
