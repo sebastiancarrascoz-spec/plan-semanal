@@ -10,6 +10,7 @@ export type TrainingAssessment = {
   reserve: number;
   pain: boolean;
   techniqueReviewed: boolean;
+  techniqueSource?: "autoregistro" | "profesional";
 };
 export function validateAssessment(a: TrainingAssessment, today: string) {
   const time = Date.parse(a.date + "T12:00:00Z");
@@ -37,7 +38,9 @@ export function validateAssessment(a: TrainingAssessment, today: string) {
     a.reserve < 0 ||
     a.reserve > 5 ||
     typeof a.pain !== "boolean" ||
-    typeof a.techniqueReviewed !== "boolean"
+    typeof a.techniqueReviewed !== "boolean" ||
+    (a.techniqueSource !== undefined &&
+      !["autoregistro", "profesional"].includes(a.techniqueSource))
   )
     throw Error("Revisa kg, repeticiones, esfuerzo y técnica.");
   return {
@@ -107,26 +110,26 @@ export function assessedPrescription(
       kg: undefined,
       reps: ex.min,
       label:
-        "La técnica necesita revisión del entrenador antes de fijar una carga",
+        "Falta comprobar el control del movimiento. Revisa las indicaciones; si no puedes confirmar la técnica, pide ayuda antes de fijar una carga",
     };
   if (a.reps < ex.min || a.reserve < 2)
     return {
       status: "reducir",
       kg: undefined,
       reps: ex.min,
-      label: `${a.kg} kg resultaron exigentes en ${a.equipment}; prueba una carga menor con el entrenador y registra el resultado`,
+      label: `${a.kg} kg resultaron exigentes en ${a.equipment}; reduce la carga y registra otra prueba sin dolor y con movimiento controlado`,
     };
   if (a.reps > ex.max)
     return {
       status: "ajustar",
       kg: undefined,
       reps: ex.min,
-      label: `Prueba ${a.kg} kg × ${ex.min} en ${a.equipment} para comparar; si sigue muy fácil, calibra el menor incremento con el entrenador`,
+      label: `Prueba ${a.kg} kg × ${ex.min} en ${a.equipment} para comparar; si sigue muy fácil, evalúa el menor incremento real sin llegar al fallo`,
     };
   return {
     status: "comprobada",
     kg: a.kg,
     reps: a.reps,
-    label: `Referencia registrada: ${a.kg} kg × ${a.reps} reps · SOLO ${a.equipment} · evaluación ${a.date}. Reserva estimada: ${a.reserve === 5 ? "5 o más" : a.reserve}. ${a.reserve > 3 ? "Inicio suave; revisa la dificultad con tu entrenador." : "Revisa el esfuerzo en cada sesión."}`,
+    label: `Referencia registrada: ${a.kg} kg × ${a.reps} reps · SOLO ${a.equipment} · evaluación ${a.date}. ${a.techniqueSource === "autoregistro" ? "Autorregistro; la app no observó la técnica." : a.techniqueSource === "profesional" ? "Revisión profesional declarada, no verificada por la app." : "Origen de la revisión técnica no registrado."} Reserva estimada: ${a.reserve === 5 ? "5 o más" : a.reserve}. ${a.reserve > 3 ? "Inicio suave; revisa la dificultad en la próxima sesión." : "Revisa el esfuerzo en cada sesión."}`,
   };
 }

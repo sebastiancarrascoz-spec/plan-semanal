@@ -63,6 +63,21 @@ test("una reserva mayor admite inicio suave sin fingir precisión", () => {
   assert.equal(p.kg, 7.5);
   assert.match(p.label, /Inicio suave/);
 });
+
+test("calibración autoguiada conserva carga realizada e identifica la fuente sin simular supervisión", () => {
+  const a = validateAssessment({ ...record, techniqueSource: "autoregistro" }, "2026-10-01");
+  const p = assessedPrescription(ex, a);
+  assert.equal(p.kg, record.kg);
+  assert.match(p.label, /Autorregistro; la app no observó la técnica/);
+  assert.equal(assessedPrescription(ex, { ...a, pain: true }).kg, undefined);
+  assert.equal(assessedPrescription(ex, { ...a, techniqueReviewed: false }).kg, undefined);
+});
+
+test("revisión profesional declarada y registros antiguos no se convierten en verificación de la app", () => {
+  assert.match(assessedPrescription(ex, { ...record, techniqueSource: "profesional" }).label, /no verificada/);
+  assert.match(assessedPrescription(ex, record).label, /Origen.*no registrado/);
+  assert.throws(() => validateAssessment({ ...record, techniqueSource: "inventada" as "autoregistro" }, "2026-10-01"));
+});
 test("validación rechaza fechas futuras y valores no válidos", () => {
   for (const patch of [
     { date: "2026-10-02" },

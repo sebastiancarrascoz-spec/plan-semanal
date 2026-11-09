@@ -330,8 +330,8 @@ export function Training(props: Props) {
                         {advice.nextKg === undefined ? null : (
                           <p>
                             Escalón propuesto: {advice.nextKg} kg, solo si el
-                            incremento declarado coincide con el equipo y tu
-                            entrenador lo confirma.
+                            incremento declarado coincide con el equipo y puedes
+                            mantener el control y el margen de repeticiones.
                           </p>
                         )}
                         <small>
@@ -377,7 +377,8 @@ export function Training(props: Props) {
                             techniqueReviewed:
                               d.get("technique") === ""
                                 ? undefined
-                                : d.get("technique") === "si",
+                                : ["autoregistro", "profesional"].includes(String(d.get("technique"))),
+                            techniqueSource: ["autoregistro", "profesional"].includes(String(d.get("technique"))) ? d.get("technique") as WorkoutSet["techniqueSource"] : undefined,
                             recovery: (String(d.get("recovery") || "") ||
                               undefined) as WorkoutSet["recovery"],
                             incrementKg: String(d.get("increment") || "").trim()
@@ -461,10 +462,11 @@ export function Training(props: Props) {
                               </select>
                             </label>
                             <label>
-                              Técnica revisada para este ejercicio
+                              Control y técnica de esta serie
                               <select name="technique" defaultValue="">
                                 <option value="">No registrado</option>
-                                <option value="si">Sí</option>
+                                <option value="autoregistro">Comprobados por mí siguiendo las indicaciones</option>
+                                <option value="profesional">Revisión profesional declarada</option>
                                 <option value="no">Necesita revisión</option>
                               </select>
                             </label>
@@ -588,8 +590,9 @@ export function Training(props: Props) {
             <h3>Antes de cada sesión</h3>
             <p>
               Camina suave 5–8 minutos. Practica una serie muy liviana de los
-              primeros ejercicios; no cuenta como serie de trabajo. Pide al
-              entrenador que ajuste las máquinas y revise tu técnica.
+              primeros ejercicios; no cuenta como serie de trabajo. Sigue los
+              ajustes del equipo y las indicaciones de cada ejercicio. Si no los
+              entiendes o no controlas el movimiento, pide una demostración.
             </p>
             <h3>Elige la carga</h3>
             <p>
@@ -603,8 +606,8 @@ export function Training(props: Props) {
               te quedan 2–3 posibles, baja la carga. Si podrías hacer más de 5
               adicionales con facilidad, descansa 90–120 segundos y prueba un
               solo incremento pequeño. Haz como máximo dos pruebas; registra la
-              carga que sí comprobaste. El entrenador elige la primera carga del
-              equipo, sin una cifra inventada por la app.
+              carga que sí realizaste. La primera carga debe ser ligera y
+              controlable en ese equipo; la app no la calcula desde tu InBody.
             </p>
             <p>
               Empieza con una carga ligera. Si no llegas al mínimo de
@@ -635,8 +638,9 @@ export function Training(props: Props) {
             <p>
               Plantilla orientativa para adultos. Los ejercicios, descansos y
               fases son decisiones de esta plantilla; no una prescripción
-              individual validada por las fuentes. Revisa el plan con tu
-              profesional, especialmente por tus antecedentes de salud.
+              individual validada por las fuentes. Puedes usar el registro
+              autoguiado. Ante síntomas, restricciones médicas o una enfermedad
+              que requiera adaptar el ejercicio, consulta antes de aumentar la intensidad.
             </p>
             {trainingSources.map((x) => (
               <p key={x.url}>
@@ -758,20 +762,21 @@ export function Training(props: Props) {
                   InBody.
                 </strong>{" "}
                 Repite solo en el equipo y ajuste evaluados. Si falta la
-                evaluación, lleva esta hoja al entrenador para calibrar. Prueba
+                evaluación, calibra con las indicaciones de la app o pide ayuda. Prueba
                 8 reps, conservando 2–3 posibles, sin dolor y con técnica
                 revisada; si eso cambia, vuelve a evaluar. No busques una
                 repetición máxima.
               </p>
               <p>
                 <strong>Cómo progresar:</strong> primero completa el rango con
-                buena técnica. Solo si todas las series llegan al tope, sin
-                dolor y con 2–3 repeticiones posibles, prueba el menor aumento
-                de carga en la próxima sesión. No aumentes por el cambio de
+                buena técnica. Tras dos fechas distintas con todas las series al
+                tope, mismo equipo y carga, sin dolor, buena recuperación y al menos
+                dos repeticiones posibles, considera el menor incremento real.
+                Vuelve a comprobar tu tolerancia. No aumentes por el cambio de
                 semana.
               </p>
               <p>
-                <strong>Observaciones y ajustes del entrenador:</strong>
+                <strong>Tus observaciones y ajustes:</strong>
                 <br />
                 ________________________________________________________________________________
                 <br />

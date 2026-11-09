@@ -1,5 +1,9 @@
 # Validación de la entrega
 
+## Calibración autoguiada 0.8.1: 9 de noviembre de 2026
+
+88 pruebas y TypeScript estricto satisfactorios. Se permite una primera referencia de carga desde una prueba autoguiada realmente registrada, con control técnico declarado y ausencia de dolor; se identifica la procedencia sin fingir observación por la app. Los registros antiguos mantienen origen desconocido. Se conservan bloqueos por dolor, técnica pendiente y esfuerzo excesivo. La impresión se alinea con las dos fechas comparables de la progresión. Ver [investigación y alcance](CALIBRACION_AUTOGUIADA_V081.md). Esta corrección retira la exigencia universal de entrenador; no certifica aptitud médica ni ejecución técnica. La revisión visual del navegador sigue pendiente.
+
 ## Seguimiento 0.8: 9 de noviembre de 2026
 
 86 pruebas, TypeScript estricto y compilación estática de producción satisfactorios. Se verifican progresión con dos fechas comparables, incertidumbre del RIR, bloqueo por dolor o recuperación, minutos reales separados de casillas, condiciones de bioimpedancia, revisión declarada vinculada a versión y resumen de 84 días sin inventar datos faltantes ni mezclar unidades o equipos. Las reglas y límites actuales están en [protocolo 0.8](PROTOCOLO_CIENTIFICO_V08.md); sustituyen el rechazo automático de una reserva mayor de tres de la versión 0.7. La revisión clínica profesional y la revisión visual de los nuevos flujos siguen pendientes. Las secciones anteriores describen verificaciones históricas y no acreditan el backend actual.

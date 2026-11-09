@@ -1,5 +1,11 @@
-export const PROTOCOL_VERSION = "2026.11.09-0.8.0";
+export const PROTOCOL_VERSION = "2026.11.09-0.8.1";
 export const evidenceSources = {
+  supervision: {
+    title: "Fisher et al. 2022 · entrenamiento con y sin supervisión",
+    url: "https://journal.iusca.org/index.php/Journal/article/view/101/185",
+    population: "Estudios heterogéneos; resultados grupales, no validación de esta app",
+    type: "Revisión sistemática y metaanálisis exploratorio",
+  },
   acsm: {
     title: "ACSM 2026 · entrenamiento de resistencia",
     url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12965823/",
@@ -45,8 +51,8 @@ export const protocolRules = [
     id: "P02",
     title: "Calibración submáxima",
     kind: "Decisión de la plantilla",
-    text: "Probamos el rango de la rutina sin exigir 1RM. La reserva es aproximada: 2–3 orienta el esfuerzo, pero una reserva mayor no invalida un inicio suave. El entrenador revisa la técnica.",
-    sources: ["acsm", "rir"],
+    text: "Probamos el rango de la rutina sin exigir 1RM. La reserva es aproximada: 2–3 orienta el esfuerzo, pero una reserva mayor no invalida un inicio suave. Se admite comprobación autoguiada del control o revisión profesional declarada, identificadas por separado. La app no observa ni certifica la técnica; ante dudas sobre el movimiento, pide ayuda.",
+    sources: ["acsm", "rir", "supervision"],
   },
   {
     id: "P03",

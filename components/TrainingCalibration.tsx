@@ -41,16 +41,18 @@ export function TrainingCalibration({
   if (!rows.length) return null;
   return (
     <section className="card training-profile" id="calibracion">
-      <span className="eyebrow blue">PRIMERA SESIÓN · CON TU ENTRENADOR</span>
+      <span className="eyebrow blue">PRIMERA SESIÓN · AUTOGUIADA O ACOMPAÑADA</span>
       <h2>Calibra tus cargas</h2>
       <p>
         Esta evaluación no busca tu máximo ni llegar al fallo. Haz A y B en días
-        separados. El entrenador ajusta la máquina, elige una carga ligera para
-        ensayar y revisa tu técnica. Usa 8 repeticiones controladas y termina
+        separados. Sigue las instrucciones del equipo y comienza con una carga
+        ligera que puedas controlar. Usa 8 repeticiones controladas y termina
         con margen, orientativamente 2–3 posibles; una reserva mayor puede ser
         un inicio suave. Es una estimación que necesita familiarización, no una
         cifra exacta. Si duele o pierdes técnica, detén la prueba.
       </p>
+      {current && <p><strong>{current.name}:</strong> {current.cue} Ajusta el asiento y los apoyos antes de empezar. Comprueba que puedes controlar la ida y la vuelta sin rebotes ni compensaciones. Si no sabes ajustar el equipo o ejecutar el movimiento, pide una demostración; no pruebes a ciegas.</p>}
+      <p>No necesitas registrar una revisión profesional para usar la rutina. Puedes declarar tu propia comprobación siguiendo estas indicaciones; la app no ve ni valida tu ejecución. Una consulta sí puede ser necesaria ante síntomas, restricciones médicas o enfermedades que requieran adaptar el ejercicio.</p>
       <p>
         Descansa 90–120 segundos entre ensayos. Como regla de esta app, limita a
         dos pruebas por ejercicio; lo pendiente puede revisarse otro día. No
@@ -95,7 +97,8 @@ export function TrainingCalibration({
                   reps: Number(d.get("reps")),
                   reserve: Number(d.get("reserve")),
                   pain: d.get("pain") === "si",
-                  techniqueReviewed: d.get("technique") === "si",
+                  techniqueReviewed: ["autoregistro", "profesional"].includes(String(d.get("technique"))),
+                  techniqueSource: d.get("technique") === "no" ? undefined : d.get("technique") as TrainingAssessment["techniqueSource"],
                 },
                 today,
               );
@@ -174,13 +177,14 @@ export function TrainingCalibration({
             </select>
           </label>
           <label>
-            ¿El entrenador revisó la técnica en esta prueba?
+            ¿Cómo comprobaste el control y la técnica en esta prueba?
             <select name="technique" defaultValue="" required>
               <option value="" disabled>
                 Selecciona
               </option>
-              <option value="si">Sí</option>
-              <option value="no">Todavía no</option>
+              <option value="autoregistro">Lo comprobé siguiendo las indicaciones</option>
+              <option value="profesional">Con revisión de un profesional</option>
+              <option value="no">No puedo confirmarlo / necesito ayuda</option>
             </select>
           </label>
           {error && <p role="alert">{error}</p>}
@@ -206,10 +210,10 @@ export function TrainingCalibration({
         </div>
       ))}
       <p className="fineprint">
-        Son datos de una prueba registrada y revisada, no una garantía médica.
+        Son datos declarados de una prueba realizada, no una técnica observada por la app ni una garantía médica.
         Cambiar de máquina, ajustes o implemento requiere revisar la carga. Si
         una prueba posterior muestra dolor o mala tolerancia, deja de aparecer
-        como carga comprobada.
+        como referencia de carga.
       </p>
     </section>
   );

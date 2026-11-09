@@ -108,7 +108,7 @@ export function progressionAdvice(
   const step = last.incrementKg;
   return result(
     "considerar",
-    "Dos sesiones completas y toleradas al tope del rango. Considera con tu entrenador el menor incremento real del mismo equipo; la app no lo aplica automáticamente.",
+    "Dos sesiones completas y toleradas al tope del rango. Considera el menor incremento real del mismo equipo y vuelve a comprobar esfuerzo y control; la app no lo aplica automáticamente.",
     step !== undefined && Number.isFinite(step) && step > 0 && step <= 50
       ? Math.round((last.kg + step) * 100) / 100
       : undefined,

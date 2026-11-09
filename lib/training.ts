@@ -18,6 +18,7 @@ export type WorkoutSet = {
   reserve?: number;
   pain?: boolean;
   techniqueReviewed?: boolean;
+  techniqueSource?: "autoregistro" | "profesional";
   recovery?: "bien" | "regular" | "mala";
   incrementKg?: number;
   unit?: "reps" | "reps_lado" | "segundos";
@@ -294,6 +295,6 @@ export function startingPrescription(
     kind: "calibrar",
     label: previous
       ? `Registro previo: ${previous.kg} kg; falta evaluar esfuerzo, equipo y técnica antes de recomendarlo`
-      : "Pendiente: registra tu primera prueba de carga con el entrenador",
+      : "Pendiente: registra tu primera prueba de carga, autoguiada o acompañada",
   };
 }

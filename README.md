@@ -1,5 +1,9 @@
 # Mi Semana
 
+## Versión 0.8.1: calibración autoguiada
+
+No se exige una revisión profesional como condición general para registrar cargas. La calibración admite comprobación propia del movimiento siguiendo las indicaciones o revisión profesional declarada, con origen explícito. Los datos antiguos no se reinterpretan como supervisados. Se conservan los controles de dolor, esfuerzo y técnica; las cargas proceden de pruebas realizadas en el equipo. Ver [investigación y alcance](docs/CALIBRACION_AUTOGUIADA_V081.md).
+
 ## Versión 0.8: seguimiento con fuentes y contexto
 
 Entrenar incorpora reglas con fuentes y población de referencia, progresión basada en dos sesiones comparables y registro de minutos reales y pausas. Progreso permite registrar condiciones del InBody, una revisión profesional declarada vinculada a la versión exacta del plan y un resumen imprimible de 12 semanas. No se deducen cargas del InBody ni se presenta el protocolo como validado clínicamente. Ver [reglas, fuentes y límites](docs/PROTOCOLO_CIENTIFICO_V08.md). La reserva de repeticiones es aproximada: un inicio suave con más de tres repeticiones en reserva ya no se rechaza automáticamente.
