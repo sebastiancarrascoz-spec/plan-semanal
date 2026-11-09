@@ -1,5 +1,9 @@
 # Validación de la entrega
 
+## Entrenamiento 0.6: 8 de noviembre de 2026
+
+Sesenta pruebas satisfactorias y TypeScript estricto. Se verifican las nuevas reglas A/B y se conserva el historial. La compilación estática completa pasa. El PDF privado de A/B se comprobó como dos páginas y ambas se renderizaron y revisaron visualmente sin cortes. No se incluyen sus datos en el repositorio. La paginación del botón de impresión del navegador queda pendiente de revisión visual en ese entorno; las reglas de impresión se revisaron en código.
+
 ## Publicación en Vercel: 8 de noviembre de 2026
 
 Producción confirmada como READY en https://plan-semanal-snowy.vercel.app, proyecto `plan-semanal`, plan Hobby. Las 53 pruebas, TypeScript y la compilación pasan en GitHub Actions para el código `b8e80d6260bc38fbcf284820f28710e2ac946ef8`. Se corrigió el preset Vercel a Other para servir la exportación estática `out` sin buscar manifiestos de servidor Next.js.

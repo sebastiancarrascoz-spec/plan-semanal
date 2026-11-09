@@ -2,6 +2,10 @@
 
 App personal en español de Chile para seguir un plan por porciones. Es una demo funcional con persistencia local y adaptador Supabase opcional. No diagnostica ni prescribe tratamientos.
 
+## Versión 0.6: entrenamiento imprimible
+
+Entrenar permite guardar edad, peso de referencia, altura, experiencia, equipamiento, molestias y semana del ciclo. Adapta las rutinas A/B y su volumen; no deduce cargas a partir del peso corporal. El botón **Imprimir A y B** prepara ambas rutinas con técnica, descansos, último registro y casillas de series. Se puede guardar como PDF desde el diálogo de impresión. Ver [alcance y fuentes](docs/ENTRENAMIENTO_V06.md).
+
 ## GitHub y alojamiento administrado
 
 Demo publicada en [Mi Semana en Vercel](https://plan-semanal-snowy.vercel.app), en el plan Hobby personal. Repositorio: [plan-semanal](https://github.com/sebastiancarrascoz-spec/plan-semanal), con GitHub Actions, Node.js 24, pruebas antes de publicar y exportación estática PWA. El despliegue por CLI está comprobado; la conexión automática con GitHub sigue pendiente de autorización. Ver [pasos y estado real](docs/GITHUB_VERCEL.md). Antes de cambiar de dominio, exportar el respaldo desde Ajustes: los datos locales no se trasladan solos.

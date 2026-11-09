@@ -2946,3 +2946,110 @@ footer {
     background: #f3f5f4;
   }
 }
+.training-profile form > label {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0;
+}
+.training-profile textarea {
+  min-height: 80px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: inherit;
+  background: var(--surface);
+}
+.training-print {
+  display: none;
+}
+.training-module button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+  .app-shell:has(.training-module) .page-heading,
+  .app-shell:has(.training-module) .training-screen,
+  .app-shell:has(.training-module) main > footer,
+  .app-shell:has(.training-module) .content > footer {
+    display: none !important;
+  }
+  .app-shell:has(.training-module) .content {
+    padding: 0;
+  }
+  .training-print {
+    display: block !important;
+    color: #16262b;
+    font-size: 10pt;
+    line-height: 1.35;
+  }
+  .training-print-page {
+    break-after: page;
+  }
+  .training-print-page:last-child {
+    break-after: auto;
+  }
+  .training-print header {
+    display: block;
+    border-bottom: 2px solid #244e8a;
+    margin-bottom: 12px;
+  }
+  .training-print header span {
+    font-size: 9pt;
+    letter-spacing: 0.06em;
+  }
+  .training-print h1 {
+    font-size: 21pt;
+    margin: 6px 0;
+  }
+  .training-print p {
+    font-size: 10pt;
+    margin: 10px 0;
+    color: #16262b;
+  }
+  .training-print table {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 9pt;
+  }
+  .training-print th,
+  .training-print td {
+    border: 1px solid #80908d;
+    padding: 8px 6px;
+    vertical-align: top;
+    text-align: left;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+  .training-print th {
+    background: #edf1f4 !important;
+    color: #16262b;
+    font-size: 8pt;
+  }
+  .training-print td small {
+    display: block;
+    font-size: 8.2pt;
+    line-height: 1.3;
+    margin-top: 5px;
+  }
+  .training-print tr {
+    break-inside: avoid;
+  }
+  .training-print .training-print-note {
+    font-size: 8pt;
+  }
+  .training-print footer {
+    display: block;
+    font-size: 7pt;
+    border-top: 1px solid #80908d;
+    padding-top: 6px;
+    margin-top: 12px;
+  }
+}

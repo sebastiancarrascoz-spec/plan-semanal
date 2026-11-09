@@ -56,6 +56,8 @@ import {
 import { Purchases } from "../components/Purchases";
 import { BodyComposition } from "../components/BodyComposition";
 import { ProfessionalSummary } from "../components/ProfessionalSummary";
+import { Training } from "../components/Training";
+import { todayKey } from "../lib/purchases";
 import { mergeBodyScans } from "../lib/body";
 import { connectCloud } from "../lib/cloud";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -68,22 +70,6 @@ const labUnits: Record<string, string> = {
   Glucosa: "mg/dL",
   HbA1c: "%",
   "Vitamina D": "ng/mL",
-};
-const routines: Record<string, string[]> = {
-  A: [
-    "Sentadilla goblet",
-    "Press de pecho",
-    "Remo con mancuerna",
-    "Peso muerto rumano",
-    "Plancha (segundos)",
-  ],
-  B: [
-    "Zancadas",
-    "Press de hombros",
-    "Jalón al pecho",
-    "Puente de glúteos",
-    "Dead bug",
-  ],
 };
 function download(name: string, data: unknown) {
   const a = document.createElement("a");
@@ -113,7 +99,6 @@ export default function Home() {
     [notice, setNotice] = useState(""),
     [online, setOnline] = useState(true),
     [sync, setSync] = useState("Solo en este dispositivo"),
-    [routine, setRoutine] = useState("A"),
     [email, setEmail] = useState(""),
     [user, setUser] = useState(""),
     [links, setLinks] = useState<any[]>([]),
@@ -962,165 +947,35 @@ export default function Home() {
             />
           )}
           {tab === "Entrenar" && (
-            <div className="two-columns">
-              <section className="card">
-                <div className="section-title">
-                  <div>
-                    <span className="eyebrow blue">
-                      FUERZA · CICLO DE 12 SEMANAS
-                    </span>
-                    <h2>Cuerpo completo</h2>
-                    <p>
-                      Plantilla orientativa. Adapta técnica y cargas con tu
-                      entrenador.
-                    </p>
-                  </div>
-                  <Dumbbell className="blue" />
-                </div>
-                <div className="routine-switch">
-                  {["A", "B"].map((r) => (
-                    <button
-                      className={
-                        routine === r ? "button blue-button" : "button outline"
-                      }
-                      onClick={() => setRoutine(r)}
-                      key={r}
-                    >
-                      Rutina {r}
-                    </button>
-                  ))}
-                </div>
-                {routines[routine].map((ex) => {
-                  const previous = s.sets
-                    .filter((x) => x.exercise === ex)
-                    .slice(-1)[0];
-                  const today = s.sets.filter(
-                    (x) => x.exercise === ex && x.date === date,
-                  );
-                  return (
-                    <div className="exercise" key={ex}>
-                      <h3>{ex}</h3>
-                      <p>
-                        3 series ·{" "}
-                        {ex.includes("Plancha")
-                          ? "20–40 segundos"
-                          : "8–12 repeticiones"}
-                        {previous &&
-                          ` · Último: ${previous.kg} kg × ${previous.reps}`}
-                      </p>
-                      {today.length >= 3 &&
-                        today
-                          .slice(-3)
-                          .every(
-                            (x) => x.reps >= (ex.includes("Plancha") ? 40 : 12),
-                          ) && (
-                          <div className="success-note">
-                            Completaste el rango. Considera un aumento pequeño
-                            si mantienes una buena técnica.
-                          </div>
-                        )}
-                      <form
-                        className="set-form"
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          const d = new FormData(e.currentTarget);
-                          update((p) => ({
-                            ...p,
-                            sets: [
-                              ...p.sets,
-                              {
-                                date,
-                                routine,
-                                exercise: ex,
-                                kg: Number(d.get("kg")),
-                                reps: Number(d.get("reps")),
-                              },
-                            ],
-                          }));
-                          notify("Serie registrada.");
-                        }}
-                      >
-                        <label>
-                          Kg
-                          <input
-                            name="kg"
-                            type="number"
-                            min="0"
-                            max="500"
-                            step="0.5"
-                            defaultValue={previous?.kg || 0}
-                            required
-                          />
-                        </label>
-                        <label>
-                          {ex.includes("Plancha") ? "Segundos" : "Reps"}
-                          <input
-                            name="reps"
-                            type="number"
-                            min="1"
-                            max="120"
-                            defaultValue={previous?.reps || 8}
-                            required
-                          />
-                        </label>
-                        <button className="button outline">
-                          Registrar serie
-                        </button>
-                      </form>
-                      <div className="portion-tags">
-                        {today.map((x, i) => (
-                          <span key={i}>
-                            Serie {i + 1}: {x.kg} kg × {x.reps}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </section>
-              <aside>
-                <section className="card">
-                  <span className="eyebrow blue">TU RECORRIDO</span>
-                  <h2>12 semanas de constancia</h2>
-                  {[
-                    "1–4 · Familiarización",
-                    "5–8 · Progresión",
-                    "9–12 · Consolidación",
-                  ].map((x, i) => (
-                    <div className="phase" key={x}>
-                      <span>{i + 1}</span>
-                      <div>
-                        <strong>{x}</strong>
-                        <p>
-                          {
-                            [
-                              "Aprende los movimientos y encuentra cargas cómodas.",
-                              "Aumenta gradualmente si completas el rango.",
-                              "Mantén la técnica y revisa tu progreso.",
-                            ][i]
-                          }
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </section>
-                <section className="education">
-                  <h3>La fuerza también es salud.</h3>
-                  <p>
-                    La actividad física ayuda al cuerpo a responder mejor a la
-                    insulina. Elige movimientos que puedas sostener y consulta
-                    las adaptaciones que necesites.
-                  </p>
-                  <a
-                    href="https://www.cdc.gov/diabetes/about/insulin-resistance-type-2-diabetes.html"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Fuente: CDC <ArrowUpRight size={13} />
-                  </a>
-                </section>
-              </aside>
-            </div>
+            <Training
+              profile={s.trainingProfile}
+              name={s.profile.name}
+              height={s.profile.height}
+              recentWeight={
+                [
+                  ...s.measurements.map((x) => ({
+                    date: x.date,
+                    weight: x.weight,
+                  })),
+                  ...s.bodyScans
+                    .filter((x) => x.metrics.weightKg !== undefined)
+                    .map((x) => ({ date: x.date, weight: x.metrics.weightKg })),
+                ]
+                  .filter((x) => x.date <= todayKey())
+                  .sort((a, b) => a.date.localeCompare(b.date))
+                  .at(-1)?.weight
+              }
+              date={date}
+              sets={s.sets}
+              onProfile={(trainingProfile) => {
+                update((p) => ({ ...p, trainingProfile }));
+                notify("Rutinas A y B adaptadas. Ya puedes imprimirlas.");
+              }}
+              onSet={(set) => {
+                update((p) => ({ ...p, sets: [...p.sets, set] }));
+                notify("Serie registrada.");
+              }}
+            />
           )}
           {tab === "Progreso" && (
             <div className="two-columns">
